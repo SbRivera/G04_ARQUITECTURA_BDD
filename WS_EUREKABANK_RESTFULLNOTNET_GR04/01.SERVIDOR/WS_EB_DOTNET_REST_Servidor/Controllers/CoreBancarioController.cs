@@ -20,14 +20,14 @@ public class CoreBancarioController : ControllerBase
         return Ok(_service.ListarMovimientos(cuenta));
     }
 
-    public record OperacionRequest(string cuenta, decimal importe);
-    public record TransferenciaRequest(string origen, string destino, decimal importe);
+    public record OperacionRequest(string cuenta, decimal importe, string? empleado = null);
+    public record TransferenciaRequest(string origen, string destino, decimal importe, string? empleado = null);
 
     [HttpPost("deposito")]
     public ActionResult<Movimiento> Deposito([FromBody] OperacionRequest req)
     {
         if (req.importe <= 0) return BadRequest("Importe inválido");
-        var mov = _service.RegistrarDeposito(req.cuenta, req.importe);
+    var mov = _service.RegistrarDeposito(req.cuenta, req.importe, req.empleado ?? "9999");
         return Ok(mov);
     }
 
@@ -35,7 +35,7 @@ public class CoreBancarioController : ControllerBase
     public ActionResult<Movimiento> Retiro([FromBody] OperacionRequest req)
     {
         if (req.importe <= 0) return BadRequest("Importe inválido");
-        var mov = _service.RegistrarRetiro(req.cuenta, req.importe);
+    var mov = _service.RegistrarRetiro(req.cuenta, req.importe, req.empleado ?? "9999");
         return Ok(mov);
     }
 
@@ -43,7 +43,7 @@ public class CoreBancarioController : ControllerBase
     public ActionResult<IEnumerable<Movimiento>> Transferencia([FromBody] TransferenciaRequest req)
     {
         if (req.importe <= 0) return BadRequest("Importe inválido");
-        var movs = _service.RegistrarTransferencia(req.origen, req.destino, req.importe);
+    var movs = _service.RegistrarTransferencia(req.origen, req.destino, req.importe, req.empleado ?? "9999");
         return Ok(movs);
     }
 }

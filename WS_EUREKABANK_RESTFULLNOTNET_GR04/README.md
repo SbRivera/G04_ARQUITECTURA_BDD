@@ -16,9 +16,20 @@ Base: http://localhost:5043 (o https://localhost:7043)
 
 Swagger/UI: /swagger
 
-## Configuración de BD
+## Configuración de BD (respetando scripts)
 
-Se usa SQL Server LocalDB y la BD `EUREKABANK` (misma que el proyecto SOAP .NET). Cambia la cadena en `appsettings.json` si es necesario.
+Se usa SQL Server LocalDB y la BD `EUREKABANK` (misma que el proyecto SOAP .NET).
+
+1) Ejecuta primero los scripts en este orden desde `03.BDD`:
+	- `Crea_BD.sql`
+	- `Carga_Datos.sql`
+2) Verifica la cadena en `01.SERVIDOR/WS_EB_DOTNET_REST_Servidor/appsettings.json` si tu instancia cambia.
+
+El modelo de datos y las operaciones de la API usan las mismas tablas y códigos de tipo de movimiento del script: 
+- Depósito: `chr_tipocodigo = '003'`
+- Retiro: `chr_tipocodigo = '004'`
+- Transferencia salida: `chr_tipocodigo = '009'`
+- Transferencia ingreso: `chr_tipocodigo = '008'`
 
 ## Cómo ejecutar (PowerShell)
 
@@ -36,6 +47,18 @@ Cliente consola:
 cd WS_EUREKABANK_RESTFULLNOTNET_GR04\02.CLICON\EB_DOTNET_REST_CliCon
 $env:EB_API_BASE="http://localhost:5043/"
 dotnet run
+```
+
+Ejemplos de payloads (JSON):
+
+- Depósito/Retiro
+```json
+{ "cuenta": "00200001", "importe": 100.00, "empleado": "9999" }
+```
+
+- Transferencia
+```json
+{ "origen": "00200001", "destino": "00100001", "importe": 50.00, "empleado": "9999" }
 ```
 
 Si no tienes el SDK .NET 8, instálalo desde https://dotnet.microsoft.com/download/dotnet/8.0.
