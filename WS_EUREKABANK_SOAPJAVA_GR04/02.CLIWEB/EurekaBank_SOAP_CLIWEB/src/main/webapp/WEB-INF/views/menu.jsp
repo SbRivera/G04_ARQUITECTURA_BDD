@@ -358,7 +358,7 @@
                 <img src="<%= request.getContextPath()%>/resources/img/logo-ldu.png" 
                      alt="Logo EurekaBank LDU" 
                      class="logo-img">
-                <h1>EurekaBank | Liga de Quito</h1>
+                <h1>EurekaBank</h1>
             </div>
 
             <div class="header-right">
