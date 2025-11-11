@@ -1,0 +1,47 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.iml
+
+# Archives
+*.zip
+*.rar
+*.7z
+
+# Logs / temp
+*.log
+*.tmp
+*.bak
+~$*
+
+# Java / Maven / Gradle
+**/target/
+**/build/
+*.class
+*.jar
+*.war
+*.ear
+
+# .NET / Visual Studio
+.vs/
+**/bin/
+**/obj/
+**/packages/
+*.user
+*.suo
+*.psess
+*.vsp
+*.vspx
+
+# NetBeans
+nbproject/private/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# Others
+**/node_modules/
