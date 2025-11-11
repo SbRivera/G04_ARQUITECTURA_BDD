@@ -1,46 +1,29 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ec.edu.monster.controlador;
 
 import ec.edu.monster.servicio.EurekaService;
 import ec.edu.monster.ws.Movimiento;
+import ec.edu.monster.ws.OperacionCuentaResponse;
 import java.util.List;
 
-/**
- *
- * @author JOIS
- */
 public class CliCon_Controlador {
     
     public List<Movimiento> traerMovimientos(String cuenta){
-        EurekaService service=new EurekaService();
-       return service.traerMovimientos(cuenta);
-           
+        EurekaService service = new EurekaService();
+        return service.traerMovimientos(cuenta);
     }
     
-    public int regDeposito(String cuenta,double importe){
-        EurekaService service=new EurekaService();
-       return service.regDeposito(cuenta,importe);
-           
+    public OperacionCuentaResponse regDeposito(String cuenta, double importe){
+        EurekaService service = new EurekaService();
+        return service.regDeposito(cuenta, importe);
     }
     
-    public int regRetiro(String cuenta,double importe){
-       EurekaService service=new EurekaService();
-       return service.regRetiro(cuenta, importe);
+    public OperacionCuentaResponse regRetiro(String cuenta, double importe){
+        EurekaService service = new EurekaService();
+        return service.regRetiro(cuenta, importe);
     }
     
-    public int regTransferencia(String cuentaOrigen, String cuentaDestino,double importe){
-       EurekaService service=new EurekaService();
-       return service.regTransferencia(cuentaOrigen, cuentaDestino, importe);
+    public OperacionCuentaResponse regTransferencia(String cuentaOrigen, String cuentaDestino, double importe){
+        EurekaService service = new EurekaService();
+        return service.regTransferencia(cuentaOrigen, cuentaDestino, importe);
     }
-
-    
-    /*
-    public String validarIngreso (String usuario, String password){
-        EurekaService service=new EurekaService();
-        return service.validarIngreso(usuario, password);
-    }
-    */
 }

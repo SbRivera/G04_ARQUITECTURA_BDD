@@ -25,7 +25,7 @@ public class EurekaService {
 
     //LOGIN
     private static final String USUARIO = "MONSTER";
-    private static final String  PASSWORD = generarHash("MONSTER9");
+    private static final String PASSWORD = generarHash("MONSTER9");
 
     public Boolean validarIngreso(String usuario, String password) {
         String hashIngresado = generarHash(password);
@@ -33,8 +33,8 @@ public class EurekaService {
     }
 
     /**
-     * Genera un hash SHA-256 de la contraseña proporcionada.*/
-
+     * Genera un hash SHA-256 de la contraseña proporcionada.
+     */
     private static String generarHash(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -90,29 +90,29 @@ public class EurekaService {
         return lista;
     }
 
-    public void registrarDeposito(String cuenta, double importe, String codEmp) {
+    public double registrarDeposito(String cuenta, double importe, String codEmp) {
         Connection cn = null;
+        double saldo;
         try {
-            //obtener la conexion
             cn = AccesoDB.getConnection();
-            //habilitar la transaccion
             cn.setAutoCommit(false);
-            //paso 1: leer datos de la cuenta
+
             String sql = "select dec_cuensaldo, int_cuencontmov "
                     + "from cuenta "
-                    + "where chr_cuencodigo = ? and vch_cuenestado = 'ACTIVO'"
-                    + "for update ";
+                    + "where chr_cuencodigo = ? and vch_cuenestado = 'ACTIVO' "
+                    + "for update";
             PreparedStatement pstm = cn.prepareStatement(sql);
             pstm.setString(1, cuenta);
             ResultSet rs = pstm.executeQuery();
             if (!rs.next()) {
                 throw new SQLException("ERROR, cuenta no existe, o no esta activa");
             }
-            double saldo = rs.getDouble("dec_cuensaldo");
+            saldo = rs.getDouble("dec_cuensaldo");
             int cont = rs.getInt("int_cuencontmov");
             rs.close();
             pstm.close();
-            //paso 2: actualizar la cuenta
+
+            // paso 2: actualizar
             saldo += importe;
             cont++;
             sql = "update cuenta "
@@ -125,7 +125,8 @@ public class EurekaService {
             pstm.setString(3, cuenta);
             pstm.executeUpdate();
             pstm.close();
-            //paso 3: Registrar movimientos
+
+            // paso 3: movimiento
             sql = "insert into movimiento(chr_cuencodigo,"
                     + "int_movinumero,dtt_movifecha,chr_emplcodigo,chr_tipocodigo,"
                     + "dec_moviimporte) values(?,?,SYSDATE(),?,'003',?)";
@@ -135,40 +136,47 @@ public class EurekaService {
             pstm.setString(3, codEmp);
             pstm.setDouble(4, importe);
             pstm.executeUpdate();
-            //Confirmar transaccion
+
             cn.commit();
         } catch (SQLException e) {
             try {
-                cn.rollback();
+                if (cn != null) {
+                    cn.rollback();
+                }
             } catch (Exception el) {
             }
             throw new RuntimeException(e.getMessage());
         } catch (Exception e) {
             try {
-                cn.rollback();
+                if (cn != null) {
+                    cn.rollback();
+                }
             } catch (Exception el) {
             }
             throw new RuntimeException("ERROR, en el proceso registrar deposito, intentelo mas tarde.");
         } finally {
             try {
-                cn.close();
+                if (cn != null) {
+                    cn.close();
+                }
             } catch (Exception e) {
             }
         }
+        // devolvemos el saldo actualizado
+        return saldo;
     }
-    
-    public void registrarRetiro(String cuenta, double importe, String codEmp) {
+
+    public double registrarRetiro(String cuenta, double importe, String codEmp) {
         Connection cn = null;
+        double saldo;
         try {
-            // Obtener la conexión
             cn = AccesoDB.getConnection();
             cn.setAutoCommit(false);
 
-            // Paso 1: Leer datos de la cuenta
             String sql = "select dec_cuensaldo, int_cuencontmov "
-                       + "from cuenta "
-                       + "where chr_cuencodigo = ? and vch_cuenestado = 'ACTIVO' "
-                       + "for update";
+                    + "from cuenta "
+                    + "where chr_cuencodigo = ? and vch_cuenestado = 'ACTIVO' "
+                    + "for update";
             PreparedStatement pstm = cn.prepareStatement(sql);
             pstm.setString(1, cuenta);
             ResultSet rs = pstm.executeQuery();
@@ -177,22 +185,19 @@ public class EurekaService {
                 throw new SQLException("ERROR: La cuenta no existe o no está activa.");
             }
 
-            double saldo = rs.getDouble("dec_cuensaldo");
+            saldo = rs.getDouble("dec_cuensaldo");
             int cont = rs.getInt("int_cuencontmov");
-            System.out.println("Saldo actual: " + saldo + ", Movimientos: " + cont);
             rs.close();
             pstm.close();
 
-            // Verificar saldo suficiente
             if (saldo < importe) {
                 throw new SQLException("ERROR: Saldo insuficiente.");
             }
 
-            // Paso 2: Actualizar la cuenta
             saldo -= importe;
             cont++;
             sql = "update cuenta set dec_cuensaldo = ?, int_cuencontmov = ? "
-                + "where chr_cuencodigo = ? and vch_cuenestado = 'ACTIVO'";
+                    + "where chr_cuencodigo = ? and vch_cuenestado = 'ACTIVO'";
             pstm = cn.prepareStatement(sql);
             pstm.setDouble(1, saldo);
             pstm.setInt(2, cont);
@@ -200,66 +205,68 @@ public class EurekaService {
             pstm.executeUpdate();
             pstm.close();
 
-            // Paso 3: Registrar movimiento
             sql = "insert into movimiento(chr_cuencodigo, int_movinumero, dtt_movifecha, chr_emplcodigo, chr_tipocodigo, dec_moviimporte) "
-                + "values (?, ?, SYSDATE(), ?, '004', ?)";
+                    + "values (?, ?, SYSDATE(), ?, '004', ?)";
             pstm = cn.prepareStatement(sql);
             pstm.setString(1, cuenta);
             pstm.setInt(2, cont);
             pstm.setString(3, codEmp);
-            pstm.setDouble(4, importe); // Monto negativo
+            pstm.setDouble(4, importe);  // si quieres, aquí podrías guardar negativo
             pstm.executeUpdate();
             cn.commit();
 
             System.out.println("Retiro registrado correctamente.");
         } catch (SQLException e) {
             try {
-                if (cn != null) cn.rollback();
-                System.err.println("Error en SQL: " + e.getMessage());
-            } catch (SQLException rollbackEx) {
-                System.err.println("Error al revertir la transacción: " + rollbackEx.getMessage());
+                if (cn != null) {
+                    cn.rollback();
+                }
+            } catch (SQLException ex) {
             }
+            System.err.println("Error en SQL: " + e.getMessage());
             throw new RuntimeException(e.getMessage());
         } finally {
             try {
-                if (cn != null) cn.close();
+                if (cn != null) {
+                    cn.close();
+                }
             } catch (SQLException e) {
-                System.err.println("Error al cerrar la conexión: " + e.getMessage());
             }
         }
+        return saldo;
     }
 
-    
-    public void registrarTransferencia(String cuentaOrigen, String cuentaDestino, double importe, String codEmp) {
+    public double registrarTransferencia(String cuentaOrigen, String cuentaDestino, double importe, String codEmp) {
         Connection cn = null;
+        double saldoOrigen;
         try {
-            // Obtener la conexión
             cn = AccesoDB.getConnection();
-            // Habilitar la transacción
             cn.setAutoCommit(false);
-            // Retiro en cuenta origen
-            registrarRetiro(cuentaOrigen, importe, codEmp);
-            // Depósito en cuenta destino
+
+            // Retiro en cuenta origen (te devolverá el nuevo saldo)
+            saldoOrigen = registrarRetiro(cuentaOrigen, importe, codEmp);
+
+            // Depósito en cuenta destino (no necesitamos su saldo aquí)
             registrarDeposito(cuentaDestino, importe, codEmp);
-            // Confirmar la transacción
+
             cn.commit();
         } catch (Exception e) {
             try {
-                cn.rollback();
+                if (cn != null) {
+                    cn.rollback();
+                }
             } catch (Exception el) {
             }
             throw new RuntimeException("ERROR en el proceso de transferencia: " + e.getMessage());
         } finally {
             try {
-                cn.close();
+                if (cn != null) {
+                    cn.close();
+                }
             } catch (Exception e) {
             }
         }
+        return saldoOrigen;
     }
-
-
-    
-
-
 
 }

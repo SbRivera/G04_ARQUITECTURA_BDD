@@ -1,38 +1,31 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ec.edu.monster.servicio;
 
-/**
- *
- * @author JOIS
- */
+import ec.edu.monster.ws.OperacionCuentaResponse;
+import java.util.List;
+
 public class EurekaService {
 
-    public int regDeposito(java.lang.String cuenta, double importe) {
+    public OperacionCuentaResponse regDeposito(String cuenta, double importe) {
         ec.edu.monster.ws.WSEureka_Service service = new ec.edu.monster.ws.WSEureka_Service();
         ec.edu.monster.ws.WSEureka port = service.getWSEurekaPort();
-        return port.regDeposito(cuenta, importe);
+        return port.regDeposito(cuenta, importe); // ahora devuelve OperacionCuentaResponse
     }
 
-    public java.util.List<ec.edu.monster.ws.Movimiento> traerMovimientos(java.lang.String cuenta) {
+    public List<ec.edu.monster.ws.Movimiento> traerMovimientos(String cuenta) {
         ec.edu.monster.ws.WSEureka_Service service = new ec.edu.monster.ws.WSEureka_Service();
         ec.edu.monster.ws.WSEureka port = service.getWSEurekaPort();
         return port.traerMovimientos(cuenta);
     }
 
-    public int regRetiro(java.lang.String cuenta, double importe) {
+    public OperacionCuentaResponse regRetiro(String cuenta, double importe) {
         ec.edu.monster.ws.WSEureka_Service service = new ec.edu.monster.ws.WSEureka_Service();
         ec.edu.monster.ws.WSEureka port = service.getWSEurekaPort();
         return port.regRetiro(cuenta, importe);
     }
 
-    public int regTransferencia(java.lang.String cuentaOrigen, java.lang.String cuentaDestino, double importe) {
+    public OperacionCuentaResponse regTransferencia(String cuentaOrigen, String cuentaDestino, double importe) {
         ec.edu.monster.ws.WSEureka_Service service = new ec.edu.monster.ws.WSEureka_Service();
         ec.edu.monster.ws.WSEureka port = service.getWSEurekaPort();
         return port.regTransferencia(cuentaOrigen, cuentaDestino, importe);
     }
-    
-    
 }

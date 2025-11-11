@@ -5,6 +5,7 @@
 package ec.edu.monster.ws;
 
 import ec.edu.monster.modelo.Movimiento;
+import ec.edu.monster.modelo.OperacionCuentaResponse;
 import ec.edu.monster.servicio.EurekaService;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
@@ -12,7 +13,6 @@ import jakarta.jws.WebResult;
 import jakarta.jws.WebService;
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  *
@@ -22,102 +22,113 @@ import java.util.List;
 public class WSEureka {
 
     //LOGIN
-    
-    
     @WebMethod(operationName = "validarIngreso")
-    public String validarIngreso(@WebParam(name = "usuario") String usuario,@WebParam(name = "password") String password) {
+    public String validarIngreso(@WebParam(name = "usuario") String usuario, @WebParam(name = "password") String password) {
         EurekaService usuarioServicio = new EurekaService();
         boolean exitoso = usuarioServicio.validarIngreso(usuario, password);
-        if(exitoso){
+        if (exitoso) {
             return "Exitoso";
         }
-            return "Denegado";
+        return "Denegado";
     }
-    
-    
+
     /**
      * Web service operation
+     *
      * @param cuenta
      * @return Retorna la lista de movimientos de una cuenta
      */
     @WebMethod(operationName = "traerMovimientos")
     @WebResult(name = "movimiento")
     public List<Movimiento> traerMovimientos(@WebParam(name = "cuenta") String cuenta) {
-        
+
         List<Movimiento> lista;
-        
+
         //proceso
         try {
             //recuperar moviemintos
-            EurekaService service =new EurekaService();
+            EurekaService service = new EurekaService();
             lista = service.leerMovimientos(cuenta);
         } catch (Exception e) {
             //en caso de error, retorne una lista vacia
             lista = new ArrayList<>();
         }
-        
+
         //retorno
         return lista;
     }
 
     /**
      * Web service operation
+     *
      * @param cuenta
      * @param importe
      * @return Estado, 1 o -1
      */
     @WebMethod(operationName = "regDeposito")
-    @WebResult(name = "estado")
-    public int regDeposito(@WebParam(name = "cuenta") String cuenta, @WebParam(name = "importe") double importe) {
-        int estado;
-        
-        //proceso
+    @WebResult(name = "resultado")
+    public OperacionCuentaResponse regDeposito(
+            @WebParam(name = "cuenta") String cuenta,
+            @WebParam(name = "importe") double importe) {
+
         String codEmp = "0001";
+        OperacionCuentaResponse resp = new OperacionCuentaResponse();
+
         try {
             EurekaService service = new EurekaService();
-            service.registrarDeposito(cuenta, importe, codEmp);
-            estado = 1;
+            double saldo = service.registrarDeposito(cuenta, importe, codEmp);
+            resp.setEstado(1);
+            resp.setSaldo(saldo);
         } catch (Exception e) {
-            estado = -1;
+            resp.setEstado(-1);
+            resp.setSaldo(-1); // o 0, como tú quieras
         }
-        
-        //retorno
-        return estado;
-    }
-    
-    @WebMethod(operationName = "regRetiro")
-    @WebResult(name = "estado")
-    public int regRetiro(@WebParam(name = "cuenta") String cuenta, @WebParam(name = "importe") double importe) {
-        int estado;
-        String codEmp = "0004";
-        try {
-            EurekaService service = new EurekaService();
-            service.registrarRetiro(cuenta, importe, codEmp);
-            estado = 1; // Éxito
-            System.out.println("Retiro exitoso: cuenta=" + cuenta + ", importe=" + importe);
-        } catch (Exception e) {
-            estado = -1; // Error
-            System.err.println("Error al realizar el retiro: " + e.getMessage());
-        }
-        return estado;
+        return resp;
     }
 
-    
-    @WebMethod(operationName = "regTransferencia")
-    @WebResult(name = "estado")
-    public int regTransferencia(@WebParam(name = "cuentaOrigen") String cuentaOrigen, 
-                                @WebParam(name = "cuentaDestino") String cuentaDestino, 
-                                @WebParam(name = "importe") double importe) {
-        int estado;
+    @WebMethod(operationName = "regRetiro")
+    @WebResult(name = "resultado")
+    public OperacionCuentaResponse regRetiro(
+            @WebParam(name = "cuenta") String cuenta,
+            @WebParam(name = "importe") double importe) {
+
         String codEmp = "0004";
+        OperacionCuentaResponse resp = new OperacionCuentaResponse();
+
         try {
             EurekaService service = new EurekaService();
-            service.registrarTransferencia(cuentaOrigen, cuentaDestino, importe, codEmp);
-            estado = 1; // Éxito
+            double saldo = service.registrarRetiro(cuenta, importe, codEmp);
+            resp.setEstado(1);
+            resp.setSaldo(saldo);
+            System.out.println("Retiro exitoso: cuenta=" + cuenta + ", importe=" + importe);
         } catch (Exception e) {
-            estado = -1; // Error
+            resp.setEstado(-1);
+            resp.setSaldo(-1);
+            System.err.println("Error al realizar el retiro: " + e.getMessage());
         }
-        return estado;
+        return resp;
+    }
+
+    @WebMethod(operationName = "regTransferencia")
+    @WebResult(name = "resultado")
+    public OperacionCuentaResponse regTransferencia(
+            @WebParam(name = "cuentaOrigen") String cuentaOrigen,
+            @WebParam(name = "cuentaDestino") String cuentaDestino,
+            @WebParam(name = "importe") double importe) {
+
+        String codEmp = "0004";
+        OperacionCuentaResponse resp = new OperacionCuentaResponse();
+
+        try {
+            EurekaService service = new EurekaService();
+            double saldoOrigen = service.registrarTransferencia(cuentaOrigen, cuentaDestino, importe, codEmp);
+            resp.setEstado(1);
+            resp.setSaldo(saldoOrigen);  // saldo de la cuenta origen
+        } catch (Exception e) {
+            resp.setEstado(-1);
+            resp.setSaldo(-1);
+        }
+        return resp;
     }
 
 }

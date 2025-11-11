@@ -1,6 +1,7 @@
 package ec.espe.monster.controller;
 
 import ec.espe.monster.service.EurekaWebClient;
+import ec.edu.monster.ws.OperacionCuentaResponse;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -21,31 +22,55 @@ public class OperacionController extends HttpServlet {
         }
 
         String action = request.getParameter("action");
-        String mensaje;
+        String mensaje = null;
+        Double saldo = null;
+        String cuentaAfectada = null;
 
         try {
             switch (action) {
                 case "deposito": {
                     String cuenta = request.getParameter("cuenta");
                     double importe = Double.parseDouble(request.getParameter("importe"));
-                    int estado = EurekaWebClient.regDeposito(cuenta, importe);
-                    mensaje = (estado == 1) ? "Depósito realizado correctamente." : "Error al realizar el depósito.";
+
+                    OperacionCuentaResponse res = EurekaWebClient.regDeposito(cuenta, importe);
+                    if (res.getEstado() == 1) {
+                        mensaje = "Depósito realizado correctamente por $" + String.format("%.2f", importe) + ".";
+                        saldo = res.getSaldo();
+                        cuentaAfectada = cuenta;
+                    } else {
+                        mensaje = "Error al realizar el depósito.";
+                    }
                     break;
                 }
                 case "retiro": {
                     String cuenta = request.getParameter("cuenta");
                     double importe = Double.parseDouble(request.getParameter("importe"));
-                    int estado = EurekaWebClient.regRetiro(cuenta, importe);
-                    mensaje = (estado == 1) ? "Retiro realizado correctamente." : "Error al realizar el retiro.";
+
+                    OperacionCuentaResponse res = EurekaWebClient.regRetiro(cuenta, importe);
+                    if (res.getEstado() == 1) {
+                        mensaje = "Retiro realizado correctamente por $" + String.format("%.2f", importe) + ".";
+                        saldo = res.getSaldo();
+                        cuentaAfectada = cuenta;
+                    } else {
+                        mensaje = "Error al realizar el retiro.";
+                    }
                     break;
                 }
                 case "transferencia": {
                     String cuentaOrigen = request.getParameter("cuentaOrigen");
                     String cuentaDestino = request.getParameter("cuentaDestino");
                     double importe = Double.parseDouble(request.getParameter("importe"));
-                    int estado = EurekaWebClient.regTransferencia(cuentaOrigen, cuentaDestino, importe);
-                    mensaje = (estado == 1) ? "Transferencia realizada correctamente."
-                                            : "Error al realizar la transferencia.";
+
+                    OperacionCuentaResponse res = EurekaWebClient.regTransferencia(cuentaOrigen, cuentaDestino, importe);
+                    if (res.getEstado() == 1) {
+                        mensaje = "Transferencia de $" + String.format("%.2f", importe)
+                                + " desde la cuenta " + cuentaOrigen
+                                + " hacia la cuenta " + cuentaDestino + " realizada correctamente.";
+                        saldo = res.getSaldo();       // saldo de la cuenta origen
+                        cuentaAfectada = cuentaOrigen;
+                    } else {
+                        mensaje = "Error al realizar la transferencia.";
+                    }
                     break;
                 }
                 default:
@@ -56,6 +81,13 @@ public class OperacionController extends HttpServlet {
         }
 
         request.setAttribute("mensaje", mensaje);
+        if (saldo != null) {
+            request.setAttribute("saldo", saldo);
+        }
+        if (cuentaAfectada != null) {
+            request.setAttribute("cuenta", cuentaAfectada);
+        }
+
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/mensaje.jsp");
         rd.forward(request, response);
     }

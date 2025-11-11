@@ -44,7 +44,14 @@
 
 <xs:complexType name="regDepositoResponse">
 <xs:sequence>
+<xs:element name="resultado" type="tns:OperacionCuentaResponse" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="OperacionCuentaResponse">
+<xs:sequence>
 <xs:element name="estado" type="xs:int"/>
+<xs:element name="saldo" type="xs:double"/>
 </xs:sequence>
 </xs:complexType>
 
@@ -58,7 +65,7 @@
 
 <xs:complexType name="regTransferenciaResponse">
 <xs:sequence>
-<xs:element name="estado" type="xs:int"/>
+<xs:element name="resultado" type="tns:OperacionCuentaResponse" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 
@@ -71,7 +78,7 @@
 
 <xs:complexType name="regRetiroResponse">
 <xs:sequence>
-<xs:element name="estado" type="xs:int"/>
+<xs:element name="resultado" type="tns:OperacionCuentaResponse" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 

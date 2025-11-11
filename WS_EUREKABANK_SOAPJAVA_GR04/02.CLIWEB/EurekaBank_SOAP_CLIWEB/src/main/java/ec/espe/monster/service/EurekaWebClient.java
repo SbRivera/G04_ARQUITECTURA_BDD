@@ -1,6 +1,7 @@
 package ec.espe.monster.service;
 
 import ec.edu.monster.ws.Movimiento;
+import ec.edu.monster.ws.OperacionCuentaResponse;
 import ec.edu.monster.ws.WSEureka;
 import ec.edu.monster.ws.WSEureka_Service;
 import java.util.List;
@@ -20,15 +21,15 @@ public class EurekaWebClient {
         return getPort().traerMovimientos(cuenta);
     }
 
-    public static int regDeposito(String cuenta, double importe) {
+    public static OperacionCuentaResponse regDeposito(String cuenta, double importe) {
         return getPort().regDeposito(cuenta, importe);
     }
 
-    public static int regRetiro(String cuenta, double importe) {
+    public static OperacionCuentaResponse regRetiro(String cuenta, double importe) {
         return getPort().regRetiro(cuenta, importe);
     }
 
-    public static int regTransferencia(String cuentaOrigen, String cuentaDestino, double importe) {
+    public static OperacionCuentaResponse regTransferencia(String cuentaOrigen, String cuentaDestino, double importe) {
         return getPort().regTransferencia(cuentaOrigen, cuentaDestino, importe);
     }
 }
