@@ -49,8 +49,8 @@ public class AccesoDB {
     String host = "localhost";
     String port = "3306";
     String database = "eurekabank";
-    String user = "root";
-    String pass = "12345";
+    String user = "MONSTER";
+    String pass = "MONSTER9";
     String useSSL = "false";
     String driver = "com.mysql.cj.jdbc.Driver";
     String instance = ""; // for SQL Server LocalDB instance name, e.g. MSSQLLocalDB

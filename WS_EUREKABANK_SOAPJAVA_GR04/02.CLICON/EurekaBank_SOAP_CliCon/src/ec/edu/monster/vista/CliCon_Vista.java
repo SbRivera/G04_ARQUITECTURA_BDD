@@ -15,8 +15,8 @@ import java.util.Scanner;
  */
 public class CliCon_Vista {
 
-    private static final String USUARIO = "monster";
-    private static final String PASS = "monster9";
+    private static final String USUARIO = "MONSTER";
+    private static final String PASS = "MONSTER9";
 
 
     /**

@@ -24,8 +24,8 @@ import java.util.List;
 public class EurekaService {
 
     //LOGIN
-    private static final String USUARIO = "monster";
-    private static final String  PASSWORD = generarHash("monster9");
+    private static final String USUARIO = "MONSTER";
+    private static final String  PASSWORD = generarHash("MONSTER9");
 
     public Boolean validarIngreso(String usuario, String password) {
         String hashIngresado = generarHash(password);
@@ -57,8 +57,8 @@ public class EurekaService {
                 + " m.dec_moviimporte importe \n"
                 + "FROM tipomovimiento t INNER JOIN movimiento m \n"
                 + "ON t.chr_tipocodigo = m.chr_tipocodigo \n"
-                + "WHERE m.chr_cuencodigo = ?"
-                + "order by 2";
+                + "WHERE m.chr_cuencodigo = ? \n"
+                + "ORDER BY m.dtt_movifecha DESC, m.int_movinumero DESC";
 
         try {
             cn = AccesoDB.getConnection();
@@ -207,7 +207,7 @@ public class EurekaService {
             pstm.setString(1, cuenta);
             pstm.setInt(2, cont);
             pstm.setString(3, codEmp);
-            pstm.setDouble(4, -importe); // Monto negativo
+            pstm.setDouble(4, importe); // Monto negativo
             pstm.executeUpdate();
             cn.commit();
 
