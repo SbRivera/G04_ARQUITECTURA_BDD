@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connected Services\ServicioEB\Reference.cs">
+    <Compile Include="Connected Services\ServicioEB2\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -58,37 +58,38 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Connected Services\ServicioEB\EB_DOTNET_SOAP_CliCon.ServicioEB.movimiento1.datasource">
+    <None Include="Connected Services\ServicioEB2\CoreBancario.wsdl" />
+    <None Include="Connected Services\ServicioEB2\CoreBancario.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ServicioEB2\CoreBancario1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ServicioEB2\CoreBancario2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ServicioEB2\CoreBancarioSoap.wsdl" />
+    <None Include="Connected Services\ServicioEB2\EB_DOTNET_SOAP_CliCon.ServicioEB2.Movimiento.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\ServicioEB\EB_DOTNET_SOAP_CliCon.ServicioEB.OperacionCuentaResponse.datasource">
+    <None Include="Connected Services\ServicioEB2\EB_DOTNET_SOAP_CliCon.ServicioEB2.OperacionCuentaResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\ServicioEB\EB_DOTNET_SOAP_CliCon.ServicioEB.regDepositoResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\ServicioEB\EB_DOTNET_SOAP_CliCon.ServicioEB.regRetiroResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\ServicioEB\EB_DOTNET_SOAP_CliCon.ServicioEB.regTransferenciaResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\ServicioEB\WSEureka.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\ServicioEB\" />
+    <WCFMetadataStorage Include="Connected Services\ServicioEB2\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\ServicioEB\configuration91.svcinfo" />
+    <None Include="Connected Services\ServicioEB2\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\ServicioEB\configuration.svcinfo" />
+    <None Include="Connected Services\ServicioEB2\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\ServicioEB\Reference.svcmap">
+    <None Include="Connected Services\ServicioEB2\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
