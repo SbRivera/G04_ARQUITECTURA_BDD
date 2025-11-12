@@ -14,16 +14,71 @@ namespace WS_EB_DOTNET_SOAP_Servidor.ec.edu.monster.db
 
         public EurekaService()
         {
-            connectionString = ConfigurationManager.ConnectionStrings["EUREKABANK"].ConnectionString;
+            // 1️⃣ Si hay cadena en Web.config, se usa
+            var cfg = ConfigurationManager.ConnectionStrings["EUREKABANK"]?.ConnectionString;
+            if (!string.IsNullOrWhiteSpace(cfg) && TryOpen(cfg, out _))
+            {
+                connectionString = cfg;
+                return;
+            }
+
+            // 2️⃣ Autodetección sin configuración previa
+            var candidates = new[]
+            {
+                "Server=localhost;Database=EUREKABANK;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True",
+                "Server=.;Database=EUREKABANK;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True",
+                "Server=.\\SQLEXPRESS;Database=EUREKABANK;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True",
+                "Server=(localdb)\\MSSQLLocalDB;Database=EUREKABANK;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True"
+            };
+
+            var errores = new List<string>();
+            foreach (var cs in candidates)
+            {
+                if (TryOpen(cs, out var err))
+                {
+                    connectionString = cs;
+                    return;
+                }
+                errores.Add(err);
+            }
+
+            throw new InvalidOperationException(
+                "❌ No se encontró la base 'EUREKABANK'. " +
+                "Crea/restaura la BD con ese nombre en alguna instancia local (localhost, .\\SQLEXPRESS o (localdb)\\MSSQLLocalDB) " +
+                "y asegúrate de tener acceso con Windows Authentication.\n\n" +
+                "Errores:\n- " + string.Join("\n- ", errores));
+        }
+
+        private static bool TryOpen(string cs, out string error)
+        {
+            try
+            {
+                using (var cn = new SqlConnection(cs))
+                {
+                    cn.Open();
+                    using (var cmd = new SqlCommand("SELECT DB_NAME()", cn))
+                    {
+                        var db = (string)cmd.ExecuteScalar();
+                        if (!string.Equals(db, "EUREKABANK", StringComparison.OrdinalIgnoreCase))
+                        {
+                            error = $"Conectó pero no a EUREKABANK (DB_NAME()={db}).";
+                            return false;
+                        }
+                    }
+                }
+                error = null;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+                return false;
+            }
         }
 
         private const string USUARIO = "MONSTER";
         private static readonly string PASSWORD = CrearHash("MONSTER9");
 
-        /// <summary>
-        /// Método para probar la conexión a la base de datos
-        /// </summary>
-        /// <returns>Mensaje indicando el estado de la conexión</returns>
         public string ProbarConexion()
         {
             try
@@ -31,38 +86,27 @@ namespace WS_EB_DOTNET_SOAP_Servidor.ec.edu.monster.db
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-
-                    // Ejecutar una consulta simple para verificar la conexión
                     var query = "SELECT GETDATE() AS FechaServidor, @@VERSION AS VersionSQL, DB_NAME() AS BaseDatos";
-                    var command = new SqlCommand(query, connection);
+                    var cmd = new SqlCommand(query, connection);
 
-                    using (var reader = command.ExecuteReader())
+                    using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            var fechaServidor = reader["FechaServidor"];
-                            var versionSQL = reader["VersionSQL"];
-                            var baseDatos = reader["BaseDatos"];
-
-                            return $"✅ CONEXIÓN EXITOSA\n" +
-                                   $"📅 Fecha del servidor: {fechaServidor}\n" +
-                                   $"🗄️ Base de datos: {baseDatos}\n" +
-                                   $"🔧 Versión SQL Server: {versionSQL.ToString().Substring(0, 100)}...";
+                            return $"✅ CONEXIÓN EXITOSA\n📅 Fecha servidor: {reader["FechaServidor"]}\n" +
+                                   $"🗄️ Base: {reader["BaseDatos"]}\n" +
+                                   $"🔧 SQL: {reader["VersionSQL"].ToString().Substring(0, 80)}...";
                         }
                     }
                 }
-                return "❌ Error: No se pudo obtener información del servidor";
+                return "❌ No se pudo obtener información del servidor.";
             }
             catch (Exception ex)
             {
-                return $"❌ ERROR DE CONEXIÓN:\n{ex.Message}\n\n🔧 String de conexión usado:\n{connectionString}";
+                return $"❌ ERROR DE CONEXIÓN: {ex.Message}\n\n🔧 String usado:\n{connectionString}";
             }
         }
 
-        /// <summary>
-        /// Método para verificar si las tablas necesarias existen
-        /// </summary>
-        /// <returns>Estado de las tablas en la base de datos</returns>
         public string VerificarTablas()
         {
             try
@@ -70,243 +114,155 @@ namespace WS_EB_DOTNET_SOAP_Servidor.ec.edu.monster.db
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-
                     var query = @"
-                        SELECT 
-                            TABLE_NAME,
-                            (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = t.TABLE_NAME) AS NumColumnas
+                        SELECT TABLE_NAME,
+                               (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = t.TABLE_NAME) AS NumColumnas
                         FROM INFORMATION_SCHEMA.TABLES t
-                        WHERE TABLE_TYPE = 'BASE TABLE' 
-                            AND TABLE_NAME IN ('cuenta', 'movimiento', 'tipomovimiento')
+                        WHERE TABLE_TYPE='BASE TABLE'
+                          AND TABLE_NAME IN ('cuenta','movimiento','tipomovimiento')
                         ORDER BY TABLE_NAME";
+                    var cmd = new SqlCommand(query, connection);
+                    var sb = new StringBuilder("📋 VERIFICACIÓN DE TABLAS:\n\n");
 
-                    var command = new SqlCommand(query, connection);
-                    var resultado = "📋 VERIFICACIÓN DE TABLAS:\n\n";
-
-                    using (var reader = command.ExecuteReader())
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        bool tablasEncontradas = false;
+                        bool found = false;
                         while (reader.Read())
                         {
-                            tablasEncontradas = true;
-                            var nombreTabla = reader["TABLE_NAME"].ToString();
-                            var numColumnas = reader["NumColumnas"].ToString();
-                            resultado += $"✅ Tabla '{nombreTabla}' - {numColumnas} columnas\n";
+                            found = true;
+                            sb.AppendLine($"✅ {reader["TABLE_NAME"]} ({reader["NumColumnas"]} columnas)");
                         }
-
-                        if (!tablasEncontradas)
-                        {
-                            resultado += "⚠️ No se encontraron las tablas necesarias (cuenta, movimiento, tipomovimiento)";
-                        }
+                        if (!found)
+                            sb.AppendLine("⚠️ No se encontraron las tablas esperadas.");
                     }
 
-                    return resultado;
+                    return sb.ToString();
                 }
             }
             catch (Exception ex)
             {
-                return $"❌ ERROR AL VERIFICAR TABLAS:\n{ex.Message}";
+                return $"❌ ERROR AL VERIFICAR TABLAS: {ex.Message}";
             }
         }
 
         public bool ValidarIngreso(string usuario, string password)
         {
-            string hashIngresado = CrearHash(password);
-            return USUARIO.Equals(usuario) && PASSWORD.Equals(hashIngresado);
+            return USUARIO.Equals(usuario) && PASSWORD.Equals(CrearHash(password));
         }
 
         public static string CrearHash(string password)
         {
-            using (var sha256 = SHA256.Create())
+            using (var sha = SHA256.Create())
             {
-                byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return Convert.ToBase64String(hashBytes);
+                byte[] hash = sha.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return Convert.ToBase64String(hash);
             }
         }
 
         public List<Movimiento> LeerMovimientos(string cuenta)
         {
-            var movimientos = new List<Movimiento>();
-            using (var connection = new SqlConnection(connectionString))
+            var lista = new List<Movimiento>();
+            using (var cn = new SqlConnection(connectionString))
             {
-                var query = @"
-                    SELECT 
-                        m.chr_cuencodigo AS Cuenta,
-                        m.int_movinumero AS NroMov,
-                        m.dtt_movifecha AS Fecha,
-                        t.vch_tipodescripcion AS Tipo,
-                        t.vch_tipoaccion AS Accion,
-                        m.dec_moviimporte AS Importe
-                    FROM tipomovimiento t
-                    INNER JOIN movimiento m ON t.chr_tipocodigo = m.chr_tipocodigo
+                var q = @"
+                    SELECT m.chr_cuencodigo AS Cuenta,
+                           m.int_movinumero AS NroMov,
+                           m.dtt_movifecha AS Fecha,
+                           t.vch_tipodescripcion AS Tipo,
+                           t.vch_tipoaccion AS Accion,
+                           m.dec_moviimporte AS Importe
+                    FROM dbo.tipomovimiento t
+                    JOIN dbo.movimiento m ON t.chr_tipocodigo = m.chr_tipocodigo
                     WHERE m.chr_cuencodigo = @Cuenta
                     ORDER BY m.int_movinumero";
+                var cmd = new SqlCommand(q, cn);
+                cmd.Parameters.AddWithValue("@Cuenta", cuenta);
 
-                var command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@Cuenta", cuenta);
-
-                connection.Open();
-                using (var reader = command.ExecuteReader())
+                cn.Open();
+                using (var rd = cmd.ExecuteReader())
                 {
-                    while (reader.Read())
+                    while (rd.Read())
                     {
-                        movimientos.Add(new Movimiento
+                        lista.Add(new Movimiento
                         {
-                            Cuenta = reader["Cuenta"].ToString(),
-                            NroMov = Convert.ToInt32(reader["NroMov"]),
-                            Fecha = Convert.ToDateTime(reader["Fecha"]),
-                            Tipo = reader["Tipo"].ToString(),
-                            Accion = reader["Accion"].ToString(),
-                            Importe = Convert.ToDouble(reader["Importe"])
+                            Cuenta = rd["Cuenta"].ToString(),
+                            NroMov = Convert.ToInt32(rd["NroMov"]),
+                            Fecha = Convert.ToDateTime(rd["Fecha"]),
+                            Tipo = rd["Tipo"].ToString(),
+                            Accion = rd["Accion"].ToString(),
+                            Importe = Convert.ToDouble(rd["Importe"])
                         });
                     }
                 }
             }
-            return movimientos;
+            return lista;
         }
 
-        public void RegistrarDeposito(string cuenta, double importe)
+        // 🔁 Transacciones atómicas
+        public void RegistrarTransferencia(string origen, string destino, double importe)
         {
-            using (var connection = new SqlConnection(connectionString))
+            using (var cn = new SqlConnection(connectionString))
             {
-                connection.Open();
-                using (var transaction = connection.BeginTransaction())
+                cn.Open();
+                using (var tx = cn.BeginTransaction())
                 {
                     try
                     {
-                        var querySelect = @"
-                    SELECT dec_cuensaldo, int_cuencontmov 
-                    FROM cuenta WITH (UPDLOCK)
-                    WHERE chr_cuencodigo = @Cuenta AND vch_cuenestado = 'ACTIVO'";
-                        var selectCommand = new SqlCommand(querySelect, connection, transaction);
-                        selectCommand.Parameters.AddWithValue("@Cuenta", cuenta);
-
-                        double saldo;
-                        int cont;
-
-                        using (var reader = selectCommand.ExecuteReader())
-                        {
-                            if (!reader.Read())
-                                throw new Exception("La cuenta no existe o no está activa.");
-
-                            saldo = Convert.ToDouble(reader["dec_cuensaldo"]);
-                            cont = Convert.ToInt32(reader["int_cuencontmov"]);
-                        }
-
-                        saldo += importe;
-                        cont++;
-                        var queryUpdate = @"
-                    UPDATE cuenta
-                    SET dec_cuensaldo = @Saldo, int_cuencontmov = @Cont
-                    WHERE chr_cuencodigo = @Cuenta";
-                        var updateCommand = new SqlCommand(queryUpdate, connection, transaction);
-                        updateCommand.Parameters.AddWithValue("@Saldo", saldo);
-                        updateCommand.Parameters.AddWithValue("@Cont", cont);
-                        updateCommand.Parameters.AddWithValue("@Cuenta", cuenta);
-                        updateCommand.ExecuteNonQuery();
-
-                        var queryInsert = @"
-                    INSERT INTO movimiento (chr_cuencodigo, int_movinumero, dtt_movifecha, chr_emplcodigo, chr_tipocodigo, dec_moviimporte)
-                    VALUES (@Cuenta, @NroMov, GETDATE(), '0001', '003', @Importe)";
-                        var insertCommand = new SqlCommand(queryInsert, connection, transaction);
-                        insertCommand.Parameters.AddWithValue("@Cuenta", cuenta);
-                        insertCommand.Parameters.AddWithValue("@NroMov", cont);
-                        insertCommand.Parameters.AddWithValue("@Importe", importe);
-                        insertCommand.ExecuteNonQuery();
-
-                        transaction.Commit();
+                        AfectarCuenta(cn, tx, origen, -importe, "004"); // Retiro
+                        AfectarCuenta(cn, tx, destino, +importe, "003"); // Depósito
+                        tx.Commit();
                     }
                     catch
                     {
-                        transaction.Rollback();
+                        tx.Rollback();
                         throw;
                     }
                 }
             }
         }
 
-        public void RegistrarRetiro(string cuenta, double importe)
+        private void AfectarCuenta(SqlConnection cn, SqlTransaction tx, string cuenta, double delta, string tipo)
         {
-            using (var connection = new SqlConnection(connectionString))
+            var qSel = @"SELECT dec_cuensaldo, int_cuencontmov FROM dbo.cuenta WITH (UPDLOCK) WHERE chr_cuencodigo=@Cuenta AND vch_cuenestado='ACTIVO'";
+            double saldo;
+            int cont;
+
+            using (var cmd = new SqlCommand(qSel, cn, tx))
             {
-                connection.Open();
-                using (var transaction = connection.BeginTransaction())
+                cmd.Parameters.AddWithValue("@Cuenta", cuenta);
+                using (var rd = cmd.ExecuteReader())
                 {
-                    try
-                    {
-                        var querySelect = @"
-                        SELECT dec_cuensaldo, int_cuencontmov 
-                        FROM cuenta WITH (UPDLOCK)
-                        WHERE chr_cuencodigo = @Cuenta AND vch_cuenestado = 'ACTIVO'";
-                        var selectCommand = new SqlCommand(querySelect, connection, transaction);
-                        selectCommand.Parameters.AddWithValue("@Cuenta", cuenta);
-
-                        double saldo;
-                        int cont;
-
-                        using (var reader = selectCommand.ExecuteReader())
-                        {
-                            if (!reader.Read())
-                                throw new Exception("La cuenta no existe o no está activa.");
-
-                            saldo = Convert.ToDouble(reader["dec_cuensaldo"]);
-                            cont = Convert.ToInt32(reader["int_cuencontmov"]);
-                        }
-
-                        if (saldo < importe)
-                            throw new Exception("Saldo insuficiente.");
-
-                        saldo -= importe;
-                        cont++;
-                        var queryUpdate = @"
-                        UPDATE cuenta
-                        SET dec_cuensaldo = @Saldo, int_cuencontmov = @Cont
-                        WHERE chr_cuencodigo = @Cuenta";
-                        var updateCommand = new SqlCommand(queryUpdate, connection, transaction);
-                        updateCommand.Parameters.AddWithValue("@Saldo", saldo);
-                        updateCommand.Parameters.AddWithValue("@Cont", cont);
-                        updateCommand.Parameters.AddWithValue("@Cuenta", cuenta);
-                        updateCommand.ExecuteNonQuery();
-
-                        var queryInsert = @"
-                        INSERT INTO movimiento (chr_cuencodigo, int_movinumero, dtt_movifecha, chr_emplcodigo, chr_tipocodigo, dec_moviimporte)
-                        VALUES (@Cuenta, @NroMov, GETDATE(), '0001', '004', @Importe)";
-                        var insertCommand = new SqlCommand(queryInsert, connection, transaction);
-                        insertCommand.Parameters.AddWithValue("@Cuenta", cuenta);
-                        insertCommand.Parameters.AddWithValue("@NroMov", cont);
-                        insertCommand.Parameters.AddWithValue("@Importe", -importe);
-                        insertCommand.ExecuteNonQuery();
-
-                        transaction.Commit();
-                    }
-                    catch
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
+                    if (!rd.Read())
+                        throw new Exception($"La cuenta {cuenta} no existe o no está activa.");
+                    saldo = Convert.ToDouble(rd["dec_cuensaldo"]);
+                    cont = Convert.ToInt32(rd["int_cuencontmov"]);
                 }
             }
-        }
 
-        public void RegistrarTransferencia(string cuentaOrigen, string cuentaDestino, double importe)
-        {
-            using (var connection = new SqlConnection(connectionString))
+            if (delta < 0 && saldo < Math.Abs(delta))
+                throw new Exception($"Saldo insuficiente en cuenta {cuenta}.");
+
+            saldo += delta;
+            cont++;
+
+            var qUpd = "UPDATE dbo.cuenta SET dec_cuensaldo=@s, int_cuencontmov=@c WHERE chr_cuencodigo=@Cuenta";
+            using (var cmd = new SqlCommand(qUpd, cn, tx))
             {
-                connection.Open();
-                using (var transaction = connection.BeginTransaction())
-                {
-                    try
-                    {
-                        RegistrarRetiro(cuentaOrigen, importe);
-                        RegistrarDeposito(cuentaDestino, importe);
-                        transaction.Commit();
-                    }
-                    catch
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
-                }
+                cmd.Parameters.AddWithValue("@s", saldo);
+                cmd.Parameters.AddWithValue("@c", cont);
+                cmd.Parameters.AddWithValue("@Cuenta", cuenta);
+                cmd.ExecuteNonQuery();
+            }
+
+            var qIns = @"INSERT INTO dbo.movimiento (chr_cuencodigo, int_movinumero, dtt_movifecha, chr_emplcodigo, chr_tipocodigo, dec_moviimporte)
+                         VALUES (@Cuenta, @nro, GETDATE(), '0001', @Tipo, @Importe)";
+            using (var cmd = new SqlCommand(qIns, cn, tx))
+            {
+                cmd.Parameters.AddWithValue("@Cuenta", cuenta);
+                cmd.Parameters.AddWithValue("@nro", cont);
+                cmd.Parameters.AddWithValue("@Tipo", tipo);
+                cmd.Parameters.AddWithValue("@Importe", delta);
+                cmd.ExecuteNonQuery();
             }
         }
     }
