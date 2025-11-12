@@ -1,19 +1,14 @@
 package ec.edu.monster.modelo;
 
-import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
-@XmlType(name = "OperacionCuentaResponse")
+@XmlRootElement(name = "OperacionCuentaResponse")
 public class OperacionCuentaResponse {
 
     private int estado;
     private double saldo;
 
     public OperacionCuentaResponse() {
-    }
-
-    public OperacionCuentaResponse(int estado, double saldo) {
-        this.estado = estado;
-        this.saldo = saldo;
     }
 
     public int getEstado() {

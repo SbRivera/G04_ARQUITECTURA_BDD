@@ -238,26 +238,124 @@ public class EurekaService {
 
     public double registrarTransferencia(String cuentaOrigen, String cuentaDestino, double importe, String codEmp) {
         Connection cn = null;
-        double saldoOrigen;
         try {
             cn = AccesoDB.getConnection();
             cn.setAutoCommit(false);
 
-            // Retiro en cuenta origen (te devolverá el nuevo saldo)
-            saldoOrigen = registrarRetiro(cuentaOrigen, importe, codEmp);
+            // ==== 1. Leer cuenta ORIGEN ====
+            String sql = "select dec_cuensaldo, int_cuencontmov "
+                    + "from cuenta "
+                    + "where chr_cuencodigo = ? and vch_cuenestado = 'ACTIVO' "
+                    + "for update";
+            PreparedStatement pstm = cn.prepareStatement(sql);
+            pstm.setString(1, cuentaOrigen);
+            ResultSet rs = pstm.executeQuery();
 
-            // Depósito en cuenta destino (no necesitamos su saldo aquí)
-            registrarDeposito(cuentaDestino, importe, codEmp);
+            if (!rs.next()) {
+                throw new SQLException("ERROR: La cuenta origen no existe o no está activa.");
+            }
+
+            double saldoOri = rs.getDouble("dec_cuensaldo");
+            int contOri = rs.getInt("int_cuencontmov");
+            rs.close();
+            pstm.close();
+
+            if (saldoOri < importe) {
+                throw new SQLException("ERROR: Saldo insuficiente en cuenta origen.");
+            }
+
+            // ==== 2. Leer cuenta DESTINO ====
+            sql = "select dec_cuensaldo, int_cuencontmov "
+                    + "from cuenta "
+                    + "where chr_cuencodigo = ? and vch_cuenestado = 'ACTIVO' "
+                    + "for update";
+            pstm = cn.prepareStatement(sql);
+            pstm.setString(1, cuentaDestino);
+            rs = pstm.executeQuery();
+
+            if (!rs.next()) {
+                throw new SQLException("ERROR: La cuenta destino no existe o no está activa.");
+            }
+
+            double saldoDes = rs.getDouble("dec_cuensaldo");
+            int contDes = rs.getInt("int_cuencontmov");
+            rs.close();
+            pstm.close();
+
+            // ==== 3. Actualizar saldos ====
+            saldoOri -= importe;
+            contOri++;
+
+            saldoDes += importe;
+            contDes++;
+
+            // Actualizar cuenta ORIGEN
+            sql = "update cuenta set dec_cuensaldo = ?, int_cuencontmov = ? "
+                    + "where chr_cuencodigo = ? and vch_cuenestado = 'ACTIVO'";
+            pstm = cn.prepareStatement(sql);
+            pstm.setDouble(1, saldoOri);
+            pstm.setInt(2, contOri);
+            pstm.setString(3, cuentaOrigen);
+            pstm.executeUpdate();
+            pstm.close();
+
+            // Actualizar cuenta DESTINO
+            sql = "update cuenta set dec_cuensaldo = ?, int_cuencontmov = ? "
+                    + "where chr_cuencodigo = ? and vch_cuenestado = 'ACTIVO'";
+            pstm = cn.prepareStatement(sql);
+            pstm.setDouble(1, saldoDes);
+            pstm.setInt(2, contDes);
+            pstm.setString(3, cuentaDestino);
+            pstm.executeUpdate();
+            pstm.close();
+
+            // ==== 4. Registrar movimiento TRANSFERENCIA SALIDA (origen) ====
+            // OJO: usa el código que tengas en tipomovimiento (ej: '005')
+            sql = "insert into movimiento(chr_cuencodigo, int_movinumero, dtt_movifecha, "
+                    + "chr_emplcodigo, chr_tipocodigo, dec_moviimporte) "
+                    + "values (?, ?, SYSDATE(), ?, '009', ?)";
+            pstm = cn.prepareStatement(sql);
+            pstm.setString(1, cuentaOrigen);
+            pstm.setInt(2, contOri);
+            pstm.setString(3, codEmp);
+            pstm.setDouble(4, importe);
+            pstm.executeUpdate();
+            pstm.close();
+
+            // ==== 5. Registrar movimiento TRANSFERENCIA ENTRADA (destino) ====
+            // OJO: código de entrada (ej: '006')
+            sql = "insert into movimiento(chr_cuencodigo, int_movinumero, dtt_movifecha, "
+                    + "chr_emplcodigo, chr_tipocodigo, dec_moviimporte) "
+                    + "values (?, ?, SYSDATE(), ?, '008', ?)";
+            pstm = cn.prepareStatement(sql);
+            pstm.setString(1, cuentaDestino);
+            pstm.setInt(2, contDes);
+            pstm.setString(3, codEmp);
+            pstm.setDouble(4, importe);
+            pstm.executeUpdate();
+            pstm.close();
 
             cn.commit();
+
+            // 👉 devolvemos el saldo de la cuenta ORIGEN
+            return saldoOri;
+
+        } catch (SQLException e) {
+            try {
+                if (cn != null) {
+                    cn.rollback();
+                }
+            } catch (Exception ex) {
+            }
+            throw new RuntimeException(e.getMessage());
         } catch (Exception e) {
             try {
                 if (cn != null) {
                     cn.rollback();
                 }
-            } catch (Exception el) {
+            } catch (Exception ex) {
             }
-            throw new RuntimeException("ERROR en el proceso de transferencia: " + e.getMessage());
+            throw new RuntimeException("ERROR en el proceso registrar transferencia, intentelo mas tarde.");
         } finally {
             try {
                 if (cn != null) {
@@ -266,7 +364,6 @@ public class EurekaService {
             } catch (Exception e) {
             }
         }
-        return saldoOrigen;
     }
 
 }
