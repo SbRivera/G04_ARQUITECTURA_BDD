@@ -1,6 +1,6 @@
-package ec.espe.monster.controller;
+package ec.edu.monster.controller;
 
-import ec.espe.monster.service.EurekaWebClient;
+import ec.edu.monster.service.EurekaWebClient;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;

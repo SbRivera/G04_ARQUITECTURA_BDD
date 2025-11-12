@@ -1,7 +1,7 @@
-package ec.espe.monster.controller;
+package ec.edu.monster.controller;
 
-import ec.espe.monster.service.EurekaWebClient;
-import ec.edu.monster.ws.OperacionCuentaResponse;
+import ec.edu.monster.service.EurekaWebClient;
+import ec.edu.monster.model.OperacionCuentaResponse;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;

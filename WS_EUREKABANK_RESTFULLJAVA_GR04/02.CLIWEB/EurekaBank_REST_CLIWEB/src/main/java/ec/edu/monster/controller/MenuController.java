@@ -1,4 +1,4 @@
-package ec.espe.monster.controller;
+package ec.edu.monster.controller;
 
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;

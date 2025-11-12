@@ -1,4 +1,4 @@
-package ec.espe.monster.service;
+package ec.edu.monster.service;
 
 import ec.edu.monster.ws.Movimiento;
 import ec.edu.monster.ws.OperacionCuentaResponse;
