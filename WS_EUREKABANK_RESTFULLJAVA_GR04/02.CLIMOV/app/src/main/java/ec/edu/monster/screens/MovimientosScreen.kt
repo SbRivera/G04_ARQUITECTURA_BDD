@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ec.edu.monster.components.DialogoError
 import ec.edu.monster.model.Movimiento
-import ec.edu.monster.service.SoapService
+import ec.edu.monster.service.RestApiService
 import ec.edu.monster.ui.theme.*
 import kotlinx.coroutines.launch
 
@@ -39,7 +39,7 @@ fun MovimientosScreen(navController: NavController, usuario: String) {
     var movimientos by remember { mutableStateOf<List<Movimiento>>(emptyList()) }
     
     val scope = rememberCoroutineScope()
-    val soapService = remember { SoapService() }
+    val restApiService = remember { RestApiService() }
     
     Scaffold(
         topBar = {
@@ -130,7 +130,7 @@ fun MovimientosScreen(navController: NavController, usuario: String) {
                                     if (cuenta.isNotBlank()) {
                                         isLoading = true
                                         scope.launch {
-                                            val resultado = soapService.traerMovimientos(cuenta)
+                                            val resultado = restApiService.traerMovimientos(cuenta)
                                             isLoading = false
                                             if (resultado.isEmpty()) {
                                                 mensajeError = "No hay movimientos registrados para esta cuenta."

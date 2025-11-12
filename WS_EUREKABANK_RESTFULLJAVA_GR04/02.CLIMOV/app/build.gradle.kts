@@ -61,8 +61,16 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    // ✅ OkHttp para comunicación HTTP/SOAP
+    // ✅ Retrofit para RESTful API
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    
+    // OkHttp para logging
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    
+    // Gson para JSON parsing
+    implementation("com.google.code.gson:gson:2.10.1")
     
     // Navigation Compose
     implementation("androidx.navigation:navigation-compose:2.7.7")

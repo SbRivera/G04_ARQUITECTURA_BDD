@@ -1,6 +1,6 @@
-# EurekaBank Mobile - Cliente SOAP Android
+# EurekaBank Mobile - Cliente RESTful Android
 
-Aplicación móvil Android que se conecta al servicio SOAP de EurekaBank para realizar operaciones bancarias.
+Aplicación móvil Android que se conecta al servicio RESTful de EurekaBank para realizar operaciones bancarias.
 
 ## 🏦 Funcionalidades
 
@@ -12,35 +12,35 @@ Aplicación móvil Android que se conecta al servicio SOAP de EurekaBank para re
 
 ## ⚙️ Configuración Importante
 
-### 1. Configurar la URL del Servidor SOAP
+### 1. Configurar la URL del Servidor RESTful
 
-Antes de ejecutar la aplicación, **DEBES** actualizar la URL del servidor SOAP en el archivo:
+Antes de ejecutar la aplicación, **DEBES** actualizar la URL del servidor RESTful en el archivo:
 
 ```
-app/src/main/java/ec/edu/monster/service/SoapService.kt
+app/src/main/java/ec/edu/monster/service/RestApiService.kt
 ```
 
 Busca la línea:
 ```kotlin
-private val baseUrl = "http://localhost:8080/WS_EurekaBank_Server/WSEureka"
+private val baseUrl = "http://localhost:8080/WSEurekaBank_Restfull_Java_G4/resources/"
 ```
 
 Y cámbiala por la IP/HOST de tu servidor. Ejemplos:
 
 ```kotlin
 // Si usas emulador Android y el servidor está en tu PC:
-private val baseUrl = "http://10.0.2.2:8080/WS_EurekaBank_Server/WSEureka"
+private val baseUrl = "http://10.0.2.2:8080/WSEurekaBank_Restfull_Java_G4/resources/"
 
 // Si usas dispositivo físico en la misma red:
-private val baseUrl = "http://192.168.1.100:8080/WS_EurekaBank_Server/WSEureka"
+private val baseUrl = "http://192.168.1.100:8080/WSEurekaBank_Restfull_Java_G4/resources/"
 
 // Si usas servidor en la nube:
-private val baseUrl = "http://tu-servidor.com:8080/WS_EurekaBank_Server/WSEureka"
+private val baseUrl = "http://tu-servidor.com:8080/WSEurekaBank_Restfull_Java_G4/resources/"
 ```
 
 ### 2. Verificar que el servidor esté ejecutándose
 
-Asegúrate de que el servidor SOAP esté corriendo y accesible desde el dispositivo/emulador.
+Asegúrate de que el servidor RESTful esté corriendo y accesible desde el dispositivo/emulador.
 
 ### 3. Permisos de Internet
 
@@ -68,13 +68,14 @@ La aplicación sigue el diseño de EurekaBank | Liga de Quito con:
 ## 🚀 Cómo ejecutar
 
 1. Abre el proyecto en Android Studio
-2. Configura la URL del servidor en `SoapService.kt`
+2. Configura la URL del servidor en `RestApiService.kt`
 3. Sincroniza Gradle
 4. Ejecuta en emulador o dispositivo físico
 
 ## 🔐 Credenciales de Prueba
 
-Consulta con el administrador del servidor para obtener credenciales válidas.
+Usuario: `MONSTER`
+Password: `MONSTER9`
 
 ## 📋 Estructura del Proyecto
 
@@ -86,6 +87,7 @@ app/src/main/java/ec/edu/monster/
 ├── model/                         # Modelos de datos
 │   ├── Movimiento.kt
 │   ├── OperacionCuentaResponse.kt
+│   ├── LoginResponse.kt
 │   └── Usuario.kt
 ├── navigation/                    # Navegación
 │   └── NavigationGraph.kt
@@ -97,7 +99,8 @@ app/src/main/java/ec/edu/monster/
 │   ├── RetiroScreen.kt
 │   └── TransferenciaScreen.kt
 ├── service/                       # Servicios
-│   └── SoapService.kt            # Cliente SOAP
+│   ├── RestApiService.kt         # Cliente RESTful
+│   └── EurekaBankApi.kt          # Interface Retrofit
 └── ui/theme/                     # Tema y colores
     ├── Color.kt
     ├── Theme.kt
@@ -109,7 +112,9 @@ app/src/main/java/ec/edu/monster/
 - **Kotlin**: Lenguaje de programación
 - **Jetpack Compose**: Framework de UI declarativa
 - **Navigation Compose**: Navegación entre pantallas
-- **OkHttp**: Cliente HTTP para SOAP
+- **Retrofit**: Cliente HTTP RESTful
+- **Gson**: Serialización/Deserialización JSON
+- **OkHttp**: Cliente HTTP y logging
 - **Coil**: Carga de imágenes
 - **Material Design 3**: Diseño de interfaz
 - **Coroutines**: Programación asíncrona

@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ec.edu.monster.R
-import ec.edu.monster.service.SoapService
+import ec.edu.monster.service.RestApiService
 import ec.edu.monster.ui.theme.*
 import kotlinx.coroutines.launch
 
@@ -37,7 +37,7 @@ fun LoginScreen(navController: NavController) {
     var modoDemo by remember { mutableStateOf(false) } // Modo demo para pruebas
     
     val scope = rememberCoroutineScope()
-    val soapService = remember { SoapService() }
+    val restApiService = remember { RestApiService() }
     
     Box(
         modifier = Modifier
@@ -230,7 +230,7 @@ fun LoginScreen(navController: NavController) {
                                 scope.launch {
                                     try {
                                         println("🔐 Intentando login con usuario: $usuario")
-                                        val resultado = soapService.validarIngreso(usuario, password)
+                                        val resultado = restApiService.validarIngreso(usuario, password)
                                         println("✅ Resultado del login: $resultado")
                                         isLoading = false
                                         if (resultado) {

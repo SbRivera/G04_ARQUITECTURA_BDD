@@ -4,7 +4,6 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
         maven { url = uri("https://jitpack.io") }
-        maven { url = uri("https://maven.googlecode.com/svn/trunk/ksoap2-android/m2-repo/") }
     }
 }
 dependencyResolutionManagement {
@@ -13,7 +12,6 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url = uri("https://jitpack.io") }
-        maven { url = uri("https://maven.googlecode.com/svn/trunk/ksoap2-android/m2-repo/") }
     }
 }
 

@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ec.edu.monster.components.DialogoError
 import ec.edu.monster.components.DialogoExito
-import ec.edu.monster.service.SoapService
+import ec.edu.monster.service.RestApiService
 import ec.edu.monster.ui.theme.*
 import kotlinx.coroutines.launch
 
@@ -37,7 +37,7 @@ fun TransferenciaScreen(navController: NavController, usuario: String) {
     var mensajeError by remember { mutableStateOf("") }
     
     val scope = rememberCoroutineScope()
-    val soapService = remember { SoapService() }
+    val restApiService = remember { RestApiService() }
     
     Scaffold(
         topBar = {
@@ -170,7 +170,7 @@ fun TransferenciaScreen(navController: NavController, usuario: String) {
                                         if (montoDouble != null && montoDouble > 0) {
                                             isLoading = true
                                             scope.launch {
-                                                val resultado = soapService.registrarTransferencia(
+                                                val resultado = restApiService.registrarTransferencia(
                                                     cuentaOrigen,
                                                     cuentaDestino,
                                                     montoDouble
