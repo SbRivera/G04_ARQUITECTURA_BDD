@@ -12,6 +12,16 @@ public class CliCon_Controlador {
         this.modelo = new CliCon_Modelo();
     }
 
+    // ========= LOGIN =========
+    public boolean login(String usuario, String password) {
+        try {
+            return modelo.login(usuario, password);
+        } catch (Exception e) {
+            System.out.println("Error al validar usuario: " + e.getMessage());
+            return false;
+        }
+    }
+
     public String registrarDeposito(String cuenta, double importe) {
         try {
             return modelo.registrarDeposito(cuenta, importe);
@@ -19,7 +29,7 @@ public class CliCon_Controlador {
             return "Error: " + e.getMessage();
         }
     }
-    
+
     public String registrarRetiro(String cuenta, double importe) {
         try {
             return modelo.registrarRetiro(cuenta, importe);
@@ -36,33 +46,29 @@ public class CliCon_Controlador {
         }
     }
 
-
     public String obtenerMovimientos(String cuenta) {
-    try {
-        JSONArray movimientos = modelo.obtenerMovimientos(cuenta);
-        StringBuilder sb = new StringBuilder();
+        try {
+            JSONArray movimientos = modelo.obtenerMovimientos(cuenta);
+            StringBuilder sb = new StringBuilder();
 
-        // Encabezados de la tabla
-        sb.append("===========================================================================================================================\n");
-        sb.append(String.format("%-20s %-20s %-25s %-15s %-20s %-20s\n", 
-                "Cuenta", "Nro Movimiento", "Fecha", "Tipo", "           Acción", "     Importe"));
-        sb.append("===========================================================================================================================\n");
+            sb.append("===========================================================================================================================\n");
+            sb.append(String.format("%-20s %-20s %-25s %-15s %-20s %-20s\n",
+                    "Cuenta", "Nro Movimiento", "Fecha", "Tipo", "           Acción", "     Importe"));
+            sb.append("===========================================================================================================================\n");
 
-        // Datos de los movimientos
-        for (int i = 0; i < movimientos.length(); i++) {
-            JSONObject mov = movimientos.getJSONObject(i);
-            sb.append(String.format("%-20s %-20s %-25s %-25s %-15s %-10.2f%n",
-                    mov.getString("cuenta"),
-                    mov.getInt("nromov"),
-                    mov.getString("fecha"),
-                    mov.getString("tipo"),
-                    mov.getString("accion"),
-                    mov.getDouble("importe")));
+            for (int i = 0; i < movimientos.length(); i++) {
+                JSONObject mov = movimientos.getJSONObject(i);
+                sb.append(String.format("%-20s %-20s %-25s %-25s %-15s %-10.2f%n",
+                        mov.getString("cuenta"),
+                        mov.getInt("nromov"),
+                        mov.getString("fecha"),
+                        mov.getString("tipo"),
+                        mov.getString("accion"),
+                        mov.getDouble("importe")));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
         }
-        return sb.toString();
-    } catch (Exception e) {
-        return "Error: " + e.getMessage();
     }
-}
-
 }

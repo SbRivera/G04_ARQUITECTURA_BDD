@@ -1,8 +1,8 @@
 package ec.edu.monster.ws;
 
 import ec.edu.monster.modelo.Movimiento;
+import ec.edu.monster.modelo.OperacionCuentaResponse;
 import ec.edu.monster.servicio.EurekaService;
-import jakarta.jws.WebParam;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -11,88 +11,110 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 
 @Path("corebancario")
+@Produces(MediaType.APPLICATION_JSON)
 public class CoreBancarioResource {
 
     private final EurekaService service = new EurekaService();
 
-    /**
-     * Web service operation to register a deposit.
-     * @param cuenta the account number
-     * @param importe the deposit amount
-     * @return Response with status 1 (success) or -1 (failure)
-     */
+    // ========= LOGIN =========
+    @POST
+    @Path("login")
+    public Response login(@QueryParam("usuario") String usuario,
+            @QueryParam("password") String password) {
+        boolean ok = service.validarIngreso(usuario, password);
+        String resultado = ok ? "Exitoso" : "Denegado";
+        return Response.ok("{\"resultado\":\"" + resultado + "\"}").build();
+        // Si prefieres, puedes devolver un objeto con booleano
+    }
+
+    // ========= DEPÓSITO =========
     @POST
     @Path("deposito")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response registrarDeposito(@QueryParam("cuenta") String cuenta,
-                                      @QueryParam("importe") double importe) {
-        int estado;
-        
-        // Asignar un código de empleado fijo
+            @QueryParam("importe") double importe) {
+
         String codEmp = "0001";
+        OperacionCuentaResponse resp = new OperacionCuentaResponse();
 
         try {
-            // Llamar al servicio de depósito
-            service.registrarDeposito(cuenta, importe, codEmp);
-            estado = 1; // Éxito
+            double saldo = service.registrarDeposito(cuenta, importe, codEmp);
+            resp.setEstado(1);
+            resp.setSaldo(saldo);
+            return Response.ok(resp).build();
         } catch (Exception e) {
-            estado = -1; // Error
+            resp.setEstado(-1);
+            resp.setSaldo(-1);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(resp)
+                    .build();
         }
-        
-        // Devolver el estado como respuesta JSON
-        return Response.ok("{\"estado\": " + estado + "}").build();
     }
-    
+
+    // ========= RETIRO =========
     @POST
     @Path("retiro")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response registrarRetiro(@QueryParam("cuenta") String cuenta,
-                                     @QueryParam("importe") double importe) {
-        int estado;
-        String codEmp = "0001"; // Código fijo del empleado
+            @QueryParam("importe") double importe) {
+
+        String codEmp = "0004";
+        OperacionCuentaResponse resp = new OperacionCuentaResponse();
+
         try {
-            service.registrarRetiro(cuenta, importe, codEmp);
-            estado = 1; // Éxito
+            double saldo = service.registrarRetiro(cuenta, importe, codEmp);
+            resp.setEstado(1);
+            resp.setSaldo(saldo);
+            return Response.ok(resp).build();
         } catch (Exception e) {
-            estado = -1; // Error
+            resp.setEstado(-1);
+            resp.setSaldo(-1);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(resp)
+                    .build();
         }
-        return Response.ok("{\"estado\": " + estado + "}").build();
     }
 
+    // ========= TRANSFERENCIA =========
     @POST
     @Path("transferencia")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response registrarTransferencia(@QueryParam("cuentaOrigen") String cuentaOrigen,
-                                            @QueryParam("cuentaDestino") String cuentaDestino,
-                                            @QueryParam("importe") double importe) {
-        int estado;
-        String codEmp = "0001"; // Código fijo del empleado
+            @QueryParam("cuentaDestino") String cuentaDestino,
+            @QueryParam("importe") double importe) {
+
+        String codEmp = "0004";
+        OperacionCuentaResponse resp = new OperacionCuentaResponse();
+
         try {
-            service.registrarTransferencia(cuentaOrigen, cuentaDestino, importe, codEmp);
-            estado = 1; // Éxito
+            double saldoOrigen = service.registrarTransferencia(cuentaOrigen, cuentaDestino, importe, codEmp);
+            resp.setEstado(1);
+            resp.setSaldo(saldoOrigen);
+            return Response.ok(resp).build();
         } catch (Exception e) {
-            estado = -1; // Error
+            resp.setEstado(-1);
+            resp.setSaldo(-1);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(resp)
+                    .build();
         }
-        return Response.ok("{\"estado\": " + estado + "}").build();
     }
 
-
-
+    // ========= MOVIMIENTOS =========
     @GET
     @Path("movimientos/{cuenta}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerMovimientos(@PathParam("cuenta") String cuenta) {
         try {
             List<Movimiento> movimientos = service.leerMovimientos(cuenta);
             return Response.ok(movimientos).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                           .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+                    .entity("{\"error\":\"" + e.getMessage() + "\"}")
+                    .build();
         }
     }
-    
-    
+
+    @GET
+    @Path("ping")
+    public Response ping() {
+        return Response.ok("{\"msg\":\"ok\"}").build();
+    }
+
 }
