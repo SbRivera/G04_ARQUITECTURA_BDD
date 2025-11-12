@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>EurekaBank - Liga de Quito</title>
+        <title>EurekaBank</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
@@ -358,7 +358,7 @@
         <div class="header">
             <img src="<%= request.getContextPath()%>/resources/img/logo-ldu.png" alt="Logo" class="header-logo">
             <div class="title">
-                <h1>EurekaBank | Liga de Quito</h1>
+                <h1>EurekaBank</h1>
                 <small>Tu banco, tu equipo.</small>
             </div>
         </div>
