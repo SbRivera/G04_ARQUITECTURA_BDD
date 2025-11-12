@@ -7,6 +7,19 @@ using WS_EB_DOTNET_SOAP.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configurar Kestrel para escuchar en todas las interfaces de red
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    // HTTP - Escuchar en todas las interfaces (0.0.0.0) en el puerto 5070
+    serverOptions.ListenAnyIP(5070);
+    
+    // HTTPS - Escuchar en todas las interfaces (0.0.0.0) en el puerto 7299
+    serverOptions.ListenAnyIP(7299, listenOptions =>
+    {
+        listenOptions.UseHttps();
+    });
+});
+
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
