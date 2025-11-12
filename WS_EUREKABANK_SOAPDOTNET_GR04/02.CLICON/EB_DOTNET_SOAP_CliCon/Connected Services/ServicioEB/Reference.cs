@@ -9,119 +9,157 @@
 //------------------------------------------------------------------------------
 
 namespace EB_DOTNET_SOAP_CliCon.ServicioEB {
-    using System.Runtime.Serialization;
-    using System;
     
     
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Movimiento", Namespace="http://tempuri.org/")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServicioEB.WSEurekaSoap")]
+    public interface WSEurekaSoap {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/validarIngreso", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        string validarIngreso(string usuario, string password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/validarIngreso", ReplyAction="*")]
+        System.Threading.Tasks.Task<string> validarIngresoAsync(string usuario, string password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/traerMovimientos", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        EB_DOTNET_SOAP_CliCon.ServicioEB.movimiento[] traerMovimientos(string cuenta);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/traerMovimientos", ReplyAction="*")]
+        System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.movimiento[]> traerMovimientosAsync(string cuenta);
+        
+        // CODEGEN: El parámetro 'OperacionCuentaResponse' requiere información adicional de esquema que no se puede capturar con el modo de parámetros. El atributo específico es 'System.Xml.Serialization.XmlElementAttribute'.
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/regDeposito", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        [return: System.ServiceModel.MessageParameterAttribute(Name="OperacionCuentaResponse")]
+        EB_DOTNET_SOAP_CliCon.ServicioEB.regDepositoResponse regDeposito(EB_DOTNET_SOAP_CliCon.ServicioEB.regDepositoRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/regDeposito", ReplyAction="*")]
+        System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.regDepositoResponse> regDepositoAsync(EB_DOTNET_SOAP_CliCon.ServicioEB.regDepositoRequest request);
+        
+        // CODEGEN: El parámetro 'OperacionCuentaResponse' requiere información adicional de esquema que no se puede capturar con el modo de parámetros. El atributo específico es 'System.Xml.Serialization.XmlElementAttribute'.
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/regRetiro", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        [return: System.ServiceModel.MessageParameterAttribute(Name="OperacionCuentaResponse")]
+        EB_DOTNET_SOAP_CliCon.ServicioEB.regRetiroResponse regRetiro(EB_DOTNET_SOAP_CliCon.ServicioEB.regRetiroRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/regRetiro", ReplyAction="*")]
+        System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.regRetiroResponse> regRetiroAsync(EB_DOTNET_SOAP_CliCon.ServicioEB.regRetiroRequest request);
+        
+        // CODEGEN: El parámetro 'OperacionCuentaResponse' requiere información adicional de esquema que no se puede capturar con el modo de parámetros. El atributo específico es 'System.Xml.Serialization.XmlElementAttribute'.
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/regTransferencia", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        [return: System.ServiceModel.MessageParameterAttribute(Name="OperacionCuentaResponse")]
+        EB_DOTNET_SOAP_CliCon.ServicioEB.regTransferenciaResponse regTransferencia(EB_DOTNET_SOAP_CliCon.ServicioEB.regTransferenciaRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/regTransferencia", ReplyAction="*")]
+        System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.regTransferenciaResponse> regTransferenciaAsync(EB_DOTNET_SOAP_CliCon.ServicioEB.regTransferenciaRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/probarConexion", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        string probarConexion();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/probarConexion", ReplyAction="*")]
+        System.Threading.Tasks.Task<string> probarConexionAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/verificarTablas", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        string verificarTablas();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/verificarTablas", ReplyAction="*")]
+        System.Threading.Tasks.Task<string> verificarTablasAsync();
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.9221.0")]
     [System.SerializableAttribute()]
-    public partial class Movimiento : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    public partial class movimiento : object, System.ComponentModel.INotifyPropertyChanged {
         
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        private string cuentaField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string CuentaField;
+        private int nromovField;
         
-        private int NroMovField;
+        private System.DateTime fechaField;
         
-        private System.DateTime FechaField;
+        private string tipoField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string TipoField;
+        private string accionField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string AccionField;
+        private decimal importeField;
         
-        private double ImporteField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public string cuenta {
             get {
-                return this.extensionDataField;
+                return this.cuentaField;
             }
             set {
-                this.extensionDataField = value;
+                this.cuentaField = value;
+                this.RaisePropertyChanged("cuenta");
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
-        public string Cuenta {
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        public int nromov {
             get {
-                return this.CuentaField;
+                return this.nromovField;
             }
             set {
-                if ((object.ReferenceEquals(this.CuentaField, value) != true)) {
-                    this.CuentaField = value;
-                    this.RaisePropertyChanged("Cuenta");
-                }
+                this.nromovField = value;
+                this.RaisePropertyChanged("nromov");
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public int NroMov {
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
+        public System.DateTime fecha {
             get {
-                return this.NroMovField;
+                return this.fechaField;
             }
             set {
-                if ((this.NroMovField.Equals(value) != true)) {
-                    this.NroMovField = value;
-                    this.RaisePropertyChanged("NroMov");
-                }
+                this.fechaField = value;
+                this.RaisePropertyChanged("fecha");
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=2)]
-        public System.DateTime Fecha {
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
+        public string tipo {
             get {
-                return this.FechaField;
+                return this.tipoField;
             }
             set {
-                if ((this.FechaField.Equals(value) != true)) {
-                    this.FechaField = value;
-                    this.RaisePropertyChanged("Fecha");
-                }
+                this.tipoField = value;
+                this.RaisePropertyChanged("tipo");
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
-        public string Tipo {
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
+        public string accion {
             get {
-                return this.TipoField;
+                return this.accionField;
             }
             set {
-                if ((object.ReferenceEquals(this.TipoField, value) != true)) {
-                    this.TipoField = value;
-                    this.RaisePropertyChanged("Tipo");
-                }
+                this.accionField = value;
+                this.RaisePropertyChanged("accion");
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
-        public string Accion {
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
+        public decimal importe {
             get {
-                return this.AccionField;
+                return this.importeField;
             }
             set {
-                if ((object.ReferenceEquals(this.AccionField, value) != true)) {
-                    this.AccionField = value;
-                    this.RaisePropertyChanged("Accion");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=5)]
-        public double Importe {
-            get {
-                return this.ImporteField;
-            }
-            set {
-                if ((this.ImporteField.Equals(value) != true)) {
-                    this.ImporteField = value;
-                    this.RaisePropertyChanged("Importe");
-                }
+                this.importeField = value;
+                this.RaisePropertyChanged("importe");
             }
         }
         
@@ -135,219 +173,68 @@ namespace EB_DOTNET_SOAP_CliCon.ServicioEB {
         }
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServicioEB.EurekaServiceSoap")]
-    public interface EurekaServiceSoap {
-        
-        // CODEGEN: Se está generando un contrato de mensaje, ya que el nombre de elemento usuario del espacio de nombres http://tempuri.org/ no está marcado para aceptar valores nil.
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ValidarIngreso", ReplyAction="*")]
-        EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoResponse ValidarIngreso(EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoRequest request);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ValidarIngreso", ReplyAction="*")]
-        System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoResponse> ValidarIngresoAsync(EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoRequest request);
-        
-        // CODEGEN: Se está generando un contrato de mensaje, ya que el nombre de elemento cuenta del espacio de nombres http://tempuri.org/ no está marcado para aceptar valores nil.
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/TraerMovimientos", ReplyAction="*")]
-        EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosResponse TraerMovimientos(EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosRequest request);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/TraerMovimientos", ReplyAction="*")]
-        System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosResponse> TraerMovimientosAsync(EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosRequest request);
-        
-        // CODEGEN: Se está generando un contrato de mensaje, ya que el nombre de elemento cuenta del espacio de nombres http://tempuri.org/ no está marcado para aceptar valores nil.
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/RegistrarDeposito", ReplyAction="*")]
-        EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoResponse RegistrarDeposito(EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoRequest request);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/RegistrarDeposito", ReplyAction="*")]
-        System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoResponse> RegistrarDepositoAsync(EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoRequest request);
-        
-        // CODEGEN: Se está generando un contrato de mensaje, ya que el nombre de elemento cuenta del espacio de nombres http://tempuri.org/ no está marcado para aceptar valores nil.
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/RegistrarRetiro", ReplyAction="*")]
-        EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroResponse RegistrarRetiro(EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroRequest request);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/RegistrarRetiro", ReplyAction="*")]
-        System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroResponse> RegistrarRetiroAsync(EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroRequest request);
-        
-        // CODEGEN: Se está generando un contrato de mensaje, ya que el nombre de elemento cuentaOrigen del espacio de nombres http://tempuri.org/ no está marcado para aceptar valores nil.
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/RegistrarTransferencia", ReplyAction="*")]
-        EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaResponse RegistrarTransferencia(EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaRequest request);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/RegistrarTransferencia", ReplyAction="*")]
-        System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaResponse> RegistrarTransferenciaAsync(EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaRequest request);
-    }
-    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.9221.0")]
+    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class ValidarIngresoRequest {
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    public partial class OperacionCuentaResponse : object, System.ComponentModel.INotifyPropertyChanged {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="ValidarIngreso", Namespace="http://tempuri.org/", Order=0)]
-        public EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoRequestBody Body;
+        private int estadoField;
         
-        public ValidarIngresoRequest() {
+        private decimal saldoField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public int estado {
+            get {
+                return this.estadoField;
+            }
+            set {
+                this.estadoField = value;
+                this.RaisePropertyChanged("estado");
+            }
         }
         
-        public ValidarIngresoRequest(EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoRequestBody Body) {
-            this.Body = Body;
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        public decimal saldo {
+            get {
+                return this.saldoField;
+            }
+            set {
+                this.saldoField = value;
+                this.RaisePropertyChanged("saldo");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
         }
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
-    public partial class ValidarIngresoRequestBody {
+    [System.ServiceModel.MessageContractAttribute(WrapperName="regDeposito", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
+    public partial class regDepositoRequest {
         
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public string usuario;
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
-        public string password;
-        
-        public ValidarIngresoRequestBody() {
-        }
-        
-        public ValidarIngresoRequestBody(string usuario, string password) {
-            this.usuario = usuario;
-            this.password = password;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class ValidarIngresoResponse {
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="ValidarIngresoResponse", Namespace="http://tempuri.org/", Order=0)]
-        public EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoResponseBody Body;
-        
-        public ValidarIngresoResponse() {
-        }
-        
-        public ValidarIngresoResponse(EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoResponseBody Body) {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
-    public partial class ValidarIngresoResponseBody {
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public string ValidarIngresoResult;
-        
-        public ValidarIngresoResponseBody() {
-        }
-        
-        public ValidarIngresoResponseBody(string ValidarIngresoResult) {
-            this.ValidarIngresoResult = ValidarIngresoResult;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class TraerMovimientosRequest {
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="TraerMovimientos", Namespace="http://tempuri.org/", Order=0)]
-        public EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosRequestBody Body;
-        
-        public TraerMovimientosRequest() {
-        }
-        
-        public TraerMovimientosRequest(EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosRequestBody Body) {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
-    public partial class TraerMovimientosRequestBody {
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
         public string cuenta;
         
-        public TraerMovimientosRequestBody() {
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=1)]
+        public decimal importe;
+        
+        public regDepositoRequest() {
         }
         
-        public TraerMovimientosRequestBody(string cuenta) {
-            this.cuenta = cuenta;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class TraerMovimientosResponse {
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="TraerMovimientosResponse", Namespace="http://tempuri.org/", Order=0)]
-        public EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosResponseBody Body;
-        
-        public TraerMovimientosResponse() {
-        }
-        
-        public TraerMovimientosResponse(EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosResponseBody Body) {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
-    public partial class TraerMovimientosResponseBody {
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public EB_DOTNET_SOAP_CliCon.ServicioEB.Movimiento[] TraerMovimientosResult;
-        
-        public TraerMovimientosResponseBody() {
-        }
-        
-        public TraerMovimientosResponseBody(EB_DOTNET_SOAP_CliCon.ServicioEB.Movimiento[] TraerMovimientosResult) {
-            this.TraerMovimientosResult = TraerMovimientosResult;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class RegistrarDepositoRequest {
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="RegistrarDeposito", Namespace="http://tempuri.org/", Order=0)]
-        public EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoRequestBody Body;
-        
-        public RegistrarDepositoRequest() {
-        }
-        
-        public RegistrarDepositoRequest(EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoRequestBody Body) {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
-    public partial class RegistrarDepositoRequestBody {
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public string cuenta;
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
-        public double importe;
-        
-        public RegistrarDepositoRequestBody() {
-        }
-        
-        public RegistrarDepositoRequestBody(string cuenta, double importe) {
+        public regDepositoRequest(string cuenta, decimal importe) {
             this.cuenta = cuenta;
             this.importe = importe;
         }
@@ -356,70 +243,37 @@ namespace EB_DOTNET_SOAP_CliCon.ServicioEB {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class RegistrarDepositoResponse {
+    [System.ServiceModel.MessageContractAttribute(WrapperName="regDepositoResponse", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
+    public partial class regDepositoResponse {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="RegistrarDepositoResponse", Namespace="http://tempuri.org/", Order=0)]
-        public EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoResponseBody Body;
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public EB_DOTNET_SOAP_CliCon.ServicioEB.OperacionCuentaResponse OperacionCuentaResponse;
         
-        public RegistrarDepositoResponse() {
+        public regDepositoResponse() {
         }
         
-        public RegistrarDepositoResponse(EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoResponseBody Body) {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
-    public partial class RegistrarDepositoResponseBody {
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public string RegistrarDepositoResult;
-        
-        public RegistrarDepositoResponseBody() {
-        }
-        
-        public RegistrarDepositoResponseBody(string RegistrarDepositoResult) {
-            this.RegistrarDepositoResult = RegistrarDepositoResult;
+        public regDepositoResponse(EB_DOTNET_SOAP_CliCon.ServicioEB.OperacionCuentaResponse OperacionCuentaResponse) {
+            this.OperacionCuentaResponse = OperacionCuentaResponse;
         }
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class RegistrarRetiroRequest {
+    [System.ServiceModel.MessageContractAttribute(WrapperName="regRetiro", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
+    public partial class regRetiroRequest {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="RegistrarRetiro", Namespace="http://tempuri.org/", Order=0)]
-        public EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroRequestBody Body;
-        
-        public RegistrarRetiroRequest() {
-        }
-        
-        public RegistrarRetiroRequest(EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroRequestBody Body) {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
-    public partial class RegistrarRetiroRequestBody {
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
         public string cuenta;
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
-        public double importe;
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=1)]
+        public decimal importe;
         
-        public RegistrarRetiroRequestBody() {
+        public regRetiroRequest() {
         }
         
-        public RegistrarRetiroRequestBody(string cuenta, double importe) {
+        public regRetiroRequest(string cuenta, decimal importe) {
             this.cuenta = cuenta;
             this.importe = importe;
         }
@@ -428,73 +282,40 @@ namespace EB_DOTNET_SOAP_CliCon.ServicioEB {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class RegistrarRetiroResponse {
+    [System.ServiceModel.MessageContractAttribute(WrapperName="regRetiroResponse", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
+    public partial class regRetiroResponse {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="RegistrarRetiroResponse", Namespace="http://tempuri.org/", Order=0)]
-        public EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroResponseBody Body;
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public EB_DOTNET_SOAP_CliCon.ServicioEB.OperacionCuentaResponse OperacionCuentaResponse;
         
-        public RegistrarRetiroResponse() {
+        public regRetiroResponse() {
         }
         
-        public RegistrarRetiroResponse(EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroResponseBody Body) {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
-    public partial class RegistrarRetiroResponseBody {
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public string RegistrarRetiroResult;
-        
-        public RegistrarRetiroResponseBody() {
-        }
-        
-        public RegistrarRetiroResponseBody(string RegistrarRetiroResult) {
-            this.RegistrarRetiroResult = RegistrarRetiroResult;
+        public regRetiroResponse(EB_DOTNET_SOAP_CliCon.ServicioEB.OperacionCuentaResponse OperacionCuentaResponse) {
+            this.OperacionCuentaResponse = OperacionCuentaResponse;
         }
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class RegistrarTransferenciaRequest {
+    [System.ServiceModel.MessageContractAttribute(WrapperName="regTransferencia", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
+    public partial class regTransferenciaRequest {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="RegistrarTransferencia", Namespace="http://tempuri.org/", Order=0)]
-        public EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaRequestBody Body;
-        
-        public RegistrarTransferenciaRequest() {
-        }
-        
-        public RegistrarTransferenciaRequest(EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaRequestBody Body) {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
-    public partial class RegistrarTransferenciaRequestBody {
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
         public string cuentaOrigen;
         
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=1)]
         public string cuentaDestino;
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
-        public double importe;
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=2)]
+        public decimal importe;
         
-        public RegistrarTransferenciaRequestBody() {
+        public regTransferenciaRequest() {
         }
         
-        public RegistrarTransferenciaRequestBody(string cuentaOrigen, string cuentaDestino, double importe) {
+        public regTransferenciaRequest(string cuentaOrigen, string cuentaDestino, decimal importe) {
             this.cuentaOrigen = cuentaOrigen;
             this.cuentaDestino = cuentaDestino;
             this.importe = importe;
@@ -504,197 +325,155 @@ namespace EB_DOTNET_SOAP_CliCon.ServicioEB {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class RegistrarTransferenciaResponse {
+    [System.ServiceModel.MessageContractAttribute(WrapperName="regTransferenciaResponse", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
+    public partial class regTransferenciaResponse {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="RegistrarTransferenciaResponse", Namespace="http://tempuri.org/", Order=0)]
-        public EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaResponseBody Body;
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public EB_DOTNET_SOAP_CliCon.ServicioEB.OperacionCuentaResponse OperacionCuentaResponse;
         
-        public RegistrarTransferenciaResponse() {
+        public regTransferenciaResponse() {
         }
         
-        public RegistrarTransferenciaResponse(EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaResponseBody Body) {
-            this.Body = Body;
+        public regTransferenciaResponse(EB_DOTNET_SOAP_CliCon.ServicioEB.OperacionCuentaResponse OperacionCuentaResponse) {
+            this.OperacionCuentaResponse = OperacionCuentaResponse;
         }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface WSEurekaSoapChannel : EB_DOTNET_SOAP_CliCon.ServicioEB.WSEurekaSoap, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
-    public partial class RegistrarTransferenciaResponseBody {
+    public partial class WSEurekaSoapClient : System.ServiceModel.ClientBase<EB_DOTNET_SOAP_CliCon.ServicioEB.WSEurekaSoap>, EB_DOTNET_SOAP_CliCon.ServicioEB.WSEurekaSoap {
         
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public string RegistrarTransferenciaResult;
-        
-        public RegistrarTransferenciaResponseBody() {
+        public WSEurekaSoapClient() {
         }
         
-        public RegistrarTransferenciaResponseBody(string RegistrarTransferenciaResult) {
-            this.RegistrarTransferenciaResult = RegistrarTransferenciaResult;
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface EurekaServiceSoapChannel : EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap, System.ServiceModel.IClientChannel {
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class EurekaServiceSoapClient : System.ServiceModel.ClientBase<EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap>, EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap {
-        
-        public EurekaServiceSoapClient() {
-        }
-        
-        public EurekaServiceSoapClient(string endpointConfigurationName) : 
+        public WSEurekaSoapClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
         
-        public EurekaServiceSoapClient(string endpointConfigurationName, string remoteAddress) : 
+        public WSEurekaSoapClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public EurekaServiceSoapClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public WSEurekaSoapClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public EurekaServiceSoapClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public WSEurekaSoapClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
         }
         
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoResponse EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap.ValidarIngreso(EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoRequest request) {
-            return base.Channel.ValidarIngreso(request);
+        public string validarIngreso(string usuario, string password) {
+            return base.Channel.validarIngreso(usuario, password);
         }
         
-        public string ValidarIngreso(string usuario, string password) {
-            EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoRequest inValue = new EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoRequest();
-            inValue.Body = new EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoRequestBody();
-            inValue.Body.usuario = usuario;
-            inValue.Body.password = password;
-            EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoResponse retVal = ((EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap)(this)).ValidarIngreso(inValue);
-            return retVal.Body.ValidarIngresoResult;
+        public System.Threading.Tasks.Task<string> validarIngresoAsync(string usuario, string password) {
+            return base.Channel.validarIngresoAsync(usuario, password);
         }
         
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoResponse> EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap.ValidarIngresoAsync(EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoRequest request) {
-            return base.Channel.ValidarIngresoAsync(request);
+        public EB_DOTNET_SOAP_CliCon.ServicioEB.movimiento[] traerMovimientos(string cuenta) {
+            return base.Channel.traerMovimientos(cuenta);
         }
         
-        public System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoResponse> ValidarIngresoAsync(string usuario, string password) {
-            EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoRequest inValue = new EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoRequest();
-            inValue.Body = new EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoRequestBody();
-            inValue.Body.usuario = usuario;
-            inValue.Body.password = password;
-            return ((EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap)(this)).ValidarIngresoAsync(inValue);
+        public System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.movimiento[]> traerMovimientosAsync(string cuenta) {
+            return base.Channel.traerMovimientosAsync(cuenta);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosResponse EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap.TraerMovimientos(EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosRequest request) {
-            return base.Channel.TraerMovimientos(request);
+        EB_DOTNET_SOAP_CliCon.ServicioEB.regDepositoResponse EB_DOTNET_SOAP_CliCon.ServicioEB.WSEurekaSoap.regDeposito(EB_DOTNET_SOAP_CliCon.ServicioEB.regDepositoRequest request) {
+            return base.Channel.regDeposito(request);
         }
         
-        public EB_DOTNET_SOAP_CliCon.ServicioEB.Movimiento[] TraerMovimientos(string cuenta) {
-            EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosRequest inValue = new EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosRequest();
-            inValue.Body = new EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosRequestBody();
-            inValue.Body.cuenta = cuenta;
-            EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosResponse retVal = ((EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap)(this)).TraerMovimientos(inValue);
-            return retVal.Body.TraerMovimientosResult;
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosResponse> EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap.TraerMovimientosAsync(EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosRequest request) {
-            return base.Channel.TraerMovimientosAsync(request);
-        }
-        
-        public System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosResponse> TraerMovimientosAsync(string cuenta) {
-            EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosRequest inValue = new EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosRequest();
-            inValue.Body = new EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosRequestBody();
-            inValue.Body.cuenta = cuenta;
-            return ((EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap)(this)).TraerMovimientosAsync(inValue);
+        public EB_DOTNET_SOAP_CliCon.ServicioEB.OperacionCuentaResponse regDeposito(string cuenta, decimal importe) {
+            EB_DOTNET_SOAP_CliCon.ServicioEB.regDepositoRequest inValue = new EB_DOTNET_SOAP_CliCon.ServicioEB.regDepositoRequest();
+            inValue.cuenta = cuenta;
+            inValue.importe = importe;
+            EB_DOTNET_SOAP_CliCon.ServicioEB.regDepositoResponse retVal = ((EB_DOTNET_SOAP_CliCon.ServicioEB.WSEurekaSoap)(this)).regDeposito(inValue);
+            return retVal.OperacionCuentaResponse;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoResponse EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap.RegistrarDeposito(EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoRequest request) {
-            return base.Channel.RegistrarDeposito(request);
+        System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.regDepositoResponse> EB_DOTNET_SOAP_CliCon.ServicioEB.WSEurekaSoap.regDepositoAsync(EB_DOTNET_SOAP_CliCon.ServicioEB.regDepositoRequest request) {
+            return base.Channel.regDepositoAsync(request);
         }
         
-        public string RegistrarDeposito(string cuenta, double importe) {
-            EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoRequest inValue = new EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoRequest();
-            inValue.Body = new EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoRequestBody();
-            inValue.Body.cuenta = cuenta;
-            inValue.Body.importe = importe;
-            EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoResponse retVal = ((EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap)(this)).RegistrarDeposito(inValue);
-            return retVal.Body.RegistrarDepositoResult;
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoResponse> EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap.RegistrarDepositoAsync(EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoRequest request) {
-            return base.Channel.RegistrarDepositoAsync(request);
-        }
-        
-        public System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoResponse> RegistrarDepositoAsync(string cuenta, double importe) {
-            EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoRequest inValue = new EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoRequest();
-            inValue.Body = new EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoRequestBody();
-            inValue.Body.cuenta = cuenta;
-            inValue.Body.importe = importe;
-            return ((EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap)(this)).RegistrarDepositoAsync(inValue);
+        public System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.regDepositoResponse> regDepositoAsync(string cuenta, decimal importe) {
+            EB_DOTNET_SOAP_CliCon.ServicioEB.regDepositoRequest inValue = new EB_DOTNET_SOAP_CliCon.ServicioEB.regDepositoRequest();
+            inValue.cuenta = cuenta;
+            inValue.importe = importe;
+            return ((EB_DOTNET_SOAP_CliCon.ServicioEB.WSEurekaSoap)(this)).regDepositoAsync(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroResponse EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap.RegistrarRetiro(EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroRequest request) {
-            return base.Channel.RegistrarRetiro(request);
+        EB_DOTNET_SOAP_CliCon.ServicioEB.regRetiroResponse EB_DOTNET_SOAP_CliCon.ServicioEB.WSEurekaSoap.regRetiro(EB_DOTNET_SOAP_CliCon.ServicioEB.regRetiroRequest request) {
+            return base.Channel.regRetiro(request);
         }
         
-        public string RegistrarRetiro(string cuenta, double importe) {
-            EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroRequest inValue = new EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroRequest();
-            inValue.Body = new EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroRequestBody();
-            inValue.Body.cuenta = cuenta;
-            inValue.Body.importe = importe;
-            EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroResponse retVal = ((EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap)(this)).RegistrarRetiro(inValue);
-            return retVal.Body.RegistrarRetiroResult;
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroResponse> EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap.RegistrarRetiroAsync(EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroRequest request) {
-            return base.Channel.RegistrarRetiroAsync(request);
-        }
-        
-        public System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroResponse> RegistrarRetiroAsync(string cuenta, double importe) {
-            EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroRequest inValue = new EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroRequest();
-            inValue.Body = new EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroRequestBody();
-            inValue.Body.cuenta = cuenta;
-            inValue.Body.importe = importe;
-            return ((EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap)(this)).RegistrarRetiroAsync(inValue);
+        public EB_DOTNET_SOAP_CliCon.ServicioEB.OperacionCuentaResponse regRetiro(string cuenta, decimal importe) {
+            EB_DOTNET_SOAP_CliCon.ServicioEB.regRetiroRequest inValue = new EB_DOTNET_SOAP_CliCon.ServicioEB.regRetiroRequest();
+            inValue.cuenta = cuenta;
+            inValue.importe = importe;
+            EB_DOTNET_SOAP_CliCon.ServicioEB.regRetiroResponse retVal = ((EB_DOTNET_SOAP_CliCon.ServicioEB.WSEurekaSoap)(this)).regRetiro(inValue);
+            return retVal.OperacionCuentaResponse;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaResponse EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap.RegistrarTransferencia(EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaRequest request) {
-            return base.Channel.RegistrarTransferencia(request);
+        System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.regRetiroResponse> EB_DOTNET_SOAP_CliCon.ServicioEB.WSEurekaSoap.regRetiroAsync(EB_DOTNET_SOAP_CliCon.ServicioEB.regRetiroRequest request) {
+            return base.Channel.regRetiroAsync(request);
         }
         
-        public string RegistrarTransferencia(string cuentaOrigen, string cuentaDestino, double importe) {
-            EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaRequest inValue = new EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaRequest();
-            inValue.Body = new EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaRequestBody();
-            inValue.Body.cuentaOrigen = cuentaOrigen;
-            inValue.Body.cuentaDestino = cuentaDestino;
-            inValue.Body.importe = importe;
-            EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaResponse retVal = ((EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap)(this)).RegistrarTransferencia(inValue);
-            return retVal.Body.RegistrarTransferenciaResult;
+        public System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.regRetiroResponse> regRetiroAsync(string cuenta, decimal importe) {
+            EB_DOTNET_SOAP_CliCon.ServicioEB.regRetiroRequest inValue = new EB_DOTNET_SOAP_CliCon.ServicioEB.regRetiroRequest();
+            inValue.cuenta = cuenta;
+            inValue.importe = importe;
+            return ((EB_DOTNET_SOAP_CliCon.ServicioEB.WSEurekaSoap)(this)).regRetiroAsync(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaResponse> EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap.RegistrarTransferenciaAsync(EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaRequest request) {
-            return base.Channel.RegistrarTransferenciaAsync(request);
+        EB_DOTNET_SOAP_CliCon.ServicioEB.regTransferenciaResponse EB_DOTNET_SOAP_CliCon.ServicioEB.WSEurekaSoap.regTransferencia(EB_DOTNET_SOAP_CliCon.ServicioEB.regTransferenciaRequest request) {
+            return base.Channel.regTransferencia(request);
         }
         
-        public System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaResponse> RegistrarTransferenciaAsync(string cuentaOrigen, string cuentaDestino, double importe) {
-            EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaRequest inValue = new EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaRequest();
-            inValue.Body = new EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaRequestBody();
-            inValue.Body.cuentaOrigen = cuentaOrigen;
-            inValue.Body.cuentaDestino = cuentaDestino;
-            inValue.Body.importe = importe;
-            return ((EB_DOTNET_SOAP_CliCon.ServicioEB.EurekaServiceSoap)(this)).RegistrarTransferenciaAsync(inValue);
+        public EB_DOTNET_SOAP_CliCon.ServicioEB.OperacionCuentaResponse regTransferencia(string cuentaOrigen, string cuentaDestino, decimal importe) {
+            EB_DOTNET_SOAP_CliCon.ServicioEB.regTransferenciaRequest inValue = new EB_DOTNET_SOAP_CliCon.ServicioEB.regTransferenciaRequest();
+            inValue.cuentaOrigen = cuentaOrigen;
+            inValue.cuentaDestino = cuentaDestino;
+            inValue.importe = importe;
+            EB_DOTNET_SOAP_CliCon.ServicioEB.regTransferenciaResponse retVal = ((EB_DOTNET_SOAP_CliCon.ServicioEB.WSEurekaSoap)(this)).regTransferencia(inValue);
+            return retVal.OperacionCuentaResponse;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.regTransferenciaResponse> EB_DOTNET_SOAP_CliCon.ServicioEB.WSEurekaSoap.regTransferenciaAsync(EB_DOTNET_SOAP_CliCon.ServicioEB.regTransferenciaRequest request) {
+            return base.Channel.regTransferenciaAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<EB_DOTNET_SOAP_CliCon.ServicioEB.regTransferenciaResponse> regTransferenciaAsync(string cuentaOrigen, string cuentaDestino, decimal importe) {
+            EB_DOTNET_SOAP_CliCon.ServicioEB.regTransferenciaRequest inValue = new EB_DOTNET_SOAP_CliCon.ServicioEB.regTransferenciaRequest();
+            inValue.cuentaOrigen = cuentaOrigen;
+            inValue.cuentaDestino = cuentaDestino;
+            inValue.importe = importe;
+            return ((EB_DOTNET_SOAP_CliCon.ServicioEB.WSEurekaSoap)(this)).regTransferenciaAsync(inValue);
+        }
+        
+        public string probarConexion() {
+            return base.Channel.probarConexion();
+        }
+        
+        public System.Threading.Tasks.Task<string> probarConexionAsync() {
+            return base.Channel.probarConexionAsync();
+        }
+        
+        public string verificarTablas() {
+            return base.Channel.verificarTablas();
+        }
+        
+        public System.Threading.Tasks.Task<string> verificarTablasAsync() {
+            return base.Channel.verificarTablasAsync();
         }
     }
 }

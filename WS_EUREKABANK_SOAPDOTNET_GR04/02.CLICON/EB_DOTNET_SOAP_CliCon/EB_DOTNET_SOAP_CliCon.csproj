@@ -58,22 +58,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Connected Services\ServicioEB\EB_DOTNET_SOAP_CliCon.ServicioEB.Movimiento.datasource">
+    <None Include="Connected Services\ServicioEB\EB_DOTNET_SOAP_CliCon.ServicioEB.movimiento1.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\ServicioEB\EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarDepositoResponse.datasource">
+    <None Include="Connected Services\ServicioEB\EB_DOTNET_SOAP_CliCon.ServicioEB.OperacionCuentaResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\ServicioEB\EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarRetiroResponse.datasource">
+    <None Include="Connected Services\ServicioEB\EB_DOTNET_SOAP_CliCon.ServicioEB.regDepositoResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\ServicioEB\EB_DOTNET_SOAP_CliCon.ServicioEB.RegistrarTransferenciaResponse.datasource">
+    <None Include="Connected Services\ServicioEB\EB_DOTNET_SOAP_CliCon.ServicioEB.regRetiroResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\ServicioEB\EB_DOTNET_SOAP_CliCon.ServicioEB.TraerMovimientosResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\ServicioEB\EB_DOTNET_SOAP_CliCon.ServicioEB.ValidarIngresoResponse.datasource">
+    <None Include="Connected Services\ServicioEB\EB_DOTNET_SOAP_CliCon.ServicioEB.regTransferenciaResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\ServicioEB\WSEureka.wsdl" />
@@ -96,6 +93,5 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -32,6 +32,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -75,6 +76,7 @@
     <Content Include="Web_config_v2.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ec.edu.monster.modelo\OperacionCuentaResponse.cs" />
     <Compile Include="ec.edu.monster.servicio\EurekaService.cs" />
     <Compile Include="ec.edu.monster.modelo\Movimiento.cs" />
     <Compile Include="ec.edu.monster.ws\WSEureka.asmx.cs">
