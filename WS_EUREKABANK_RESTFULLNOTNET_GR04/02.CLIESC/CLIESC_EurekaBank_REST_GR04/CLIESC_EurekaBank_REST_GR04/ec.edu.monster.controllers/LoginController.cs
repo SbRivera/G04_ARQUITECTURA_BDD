@@ -28,14 +28,14 @@ namespace ec.edu.monster.controllers
                 return;
             }
 
-            // Bypass de autenticación para demos sin servidor: MONSTER / MONSTER9
+            // Bypass para demo sin servidor: acepta MONSTER / MONSTER9
             if (string.Equals(user, "MONSTER", StringComparison.OrdinalIgnoreCase) &&
                 string.Equals(pass, "MONSTER9", StringComparison.OrdinalIgnoreCase))
             {
                 UsuarioActual = user.ToUpperInvariant();
                 var home = new HomeWindow();
                 var ctrl = new HomeController(home, _api);
-                Application.Current.MainWindow = home;
+                System.Windows.Application.Current.MainWindow = home;
                 _view.Hide();
                 home.Show();
                 _view.Close();
@@ -55,7 +55,6 @@ namespace ec.edu.monster.controllers
                 UsuarioActual = user.ToUpperInvariant();
                 var home = new HomeWindow();
                 var ctrl = new HomeController(home, _api);
-                Application.Current.MainWindow = home;
                 _view.Hide();
                 home.Show();
                 _view.Close();
